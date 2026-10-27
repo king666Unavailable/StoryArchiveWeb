@@ -263,14 +263,14 @@ function goBack() {
 .recap-message { grid-column:1 / -1; margin:0; color:#f1eee9bd; text-align:center; font-size:15px; line-height:1.8; }
 .recap-scroll::-webkit-scrollbar { width:3px; }.recap-scroll::-webkit-scrollbar-track { background:transparent; }.recap-scroll::-webkit-scrollbar-thumb { background:#e6e1d6b5; }
 @media (max-width:850px) and (orientation:landscape) {
-  .recap-header { height:54px; padding:0 24px; }.recap-back { width:34px;height:34px; }.recap-header-title strong { font-size:15px; }.recap-alignment-toggle { padding:6px 8px; gap:5px; font-size:11px; }.recap-alignment-toggle svg { width:13px; height:13px; }.recap-scroll { top:64px; right:18px; bottom:10px; left:calc(27vw + 28px); padding:12px 10px 24px; }
-  .recap-toc { top:75px; bottom:16px; left:28px; width:22vw; padding-right:10px; }.recap-toc-title { margin-bottom:7px; padding-bottom:5px; font-size:11px; }.recap-toc-rail { top:16px; bottom:16px; }.recap-toc-item { min-height:32px; gap:6px; font-size:11px; }.recap-toc-star { flex-basis:16px; font-size:11px; }
+  .recap-header { height:54px; padding:0 24px; }.recap-back { width:34px;height:34px; }.recap-header-title strong { font-size:15px; }.recap-alignment-toggle { padding:6px 8px; gap:5px; font-size:11px; }.recap-alignment-toggle svg { width:13px; height:13px; }.recap-scroll { top:64px; right:18px; bottom:10px; left:calc(29vw + 28px); padding:12px 10px 24px; }
+  .recap-toc { top:75px; bottom:16px; left:28px; width:27vw; padding-right:10px; }.recap-toc-title { margin-bottom:7px; padding-bottom:5px; font-size:11px; }.recap-toc-rail { top:16px; bottom:16px; }.recap-toc-item { min-height:32px; gap:6px; font-size:11px; }.recap-toc-star { flex-basis:16px; font-size:11px; }
   .recap-flow { grid-template-columns:minmax(0,1fr) minmax(0,1.1fr) minmax(0,1fr); column-gap:14px; row-gap:8px; }
   .recap-dialogue,.recap-narration { font-size:clamp(12px,2.2vh,16px); line-height:1.55; }.recap-speaker { margin-bottom:4px; }
 }
 @media (max-width:820px) and (orientation:portrait) {
-  .recap-header { height:54px; padding:0 24px; }.recap-back { width:34px;height:34px; }.recap-header-title strong { font-size:15px; }.recap-alignment-toggle { padding:6px 8px; gap:5px; font-size:11px; }.recap-alignment-toggle svg { width:13px; height:13px; }.recap-scroll { top:64px; right:18px; bottom:10px; left:calc(27vw + 28px); padding:12px 10px 24px; }
-  .recap-toc { top:75px; bottom:16px; left:28px; width:22vw; padding-right:10px; }.recap-toc-title { margin-bottom:7px; padding-bottom:5px; font-size:11px; }.recap-toc-rail { top:16px; bottom:16px; }.recap-toc-item { min-height:32px; gap:6px; font-size:11px; }.recap-toc-star { flex-basis:16px; font-size:11px; }
+  .recap-header { height:54px; padding:0 24px; }.recap-back { width:34px;height:34px; }.recap-header-title strong { font-size:15px; }.recap-alignment-toggle { padding:6px 8px; gap:5px; font-size:11px; }.recap-alignment-toggle svg { width:13px; height:13px; }.recap-scroll { top:64px; right:18px; bottom:10px; left:calc(29vw + 28px); padding:12px 10px 24px; }
+  .recap-toc { top:75px; bottom:16px; left:28px; width:27vw; padding-right:10px; }.recap-toc-title { margin-bottom:7px; padding-bottom:5px; font-size:11px; }.recap-toc-rail { top:16px; bottom:16px; }.recap-toc-item { min-height:32px; gap:6px; font-size:11px; }.recap-toc-star { flex-basis:16px; font-size:11px; }
   .recap-flow { grid-template-columns:minmax(0,1fr) minmax(0,1.1fr) minmax(0,1fr); column-gap:14px; row-gap:8px; }
   .recap-dialogue,.recap-narration { font-size:clamp(12px,2.2vh,16px); line-height:1.55; }.recap-speaker { margin-bottom:4px; }
 }
