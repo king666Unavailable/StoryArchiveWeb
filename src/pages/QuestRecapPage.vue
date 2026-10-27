@@ -190,17 +190,19 @@ function goBack() {
 
     <nav v-if="tocSections.length" class="recap-toc" aria-label="章节目录">
       <p class="recap-toc-title">目录</p>
-      <div class="recap-toc-rail" aria-hidden="true"></div>
-      <button
-        v-for="section in tocSections"
-        :key="section.id"
-        class="recap-toc-item"
-        :class="{ active: activeSectionId === section.id }"
-        @click="jumpToSection(section)"
-      >
-        <span class="recap-toc-star" aria-hidden="true">{{ activeSectionId === section.id ? '✦' : '✧' }}</span>
-        <span>{{ section.title }}</span>
-      </button>
+      <div class="recap-toc-list">
+        <div class="recap-toc-rail" aria-hidden="true"></div>
+        <button
+          v-for="section in tocSections"
+          :key="section.id"
+          class="recap-toc-item"
+          :class="{ active: activeSectionId === section.id }"
+          @click="jumpToSection(section)"
+        >
+          <span class="recap-toc-star" aria-hidden="true">{{ activeSectionId === section.id ? '✦' : '✧' }}</span>
+          <span>{{ section.title }}</span>
+        </button>
+      </div>
     </nav>
 
     <div ref="recapScroll" class="recap-scroll" tabindex="0" aria-label="回顾正文" @scroll.passive="rememberScrollPosition">
@@ -245,7 +247,7 @@ function goBack() {
 .recap-alignment-toggle:hover { border-color:#e5edff88; color:#fff; background:#dfeaff1c; }.recap-alignment-toggle svg { width:16px; height:16px; fill:none; stroke:currentColor; stroke-width:1.25; stroke-linecap:round; }
 .recap-toc { position:absolute; z-index:1; top:112px; bottom:28px; left:clamp(25px,5vw,76px); width:min(15vw,220px); overflow-y:auto; padding:8px 16px 12px 0; scrollbar-width:none; }
 .recap-toc::-webkit-scrollbar { display:none; }.recap-toc-title { margin:0 8px 12px 0; padding-bottom:9px; border-bottom:1px solid #dce8ff45; color:#e4ebffca; font:14px var(--mono); letter-spacing:.14em; }
-.recap-toc-rail { position:absolute; top:48px; bottom:15px; left:10px; width:1px; background:linear-gradient(#f1f5ff9e,#e5edff22); }
+.recap-toc-list { position:relative; display:flex; flex:none; flex-direction:column; }.recap-toc-rail { position:absolute; top:20px; bottom:20px; left:10px; width:1px; background:linear-gradient(#f1f5ff9e,#e5edff22); }
 .recap-toc-item { position:relative; z-index:1; display:flex; align-items:center; gap:10px; width:100%; min-height:42px; padding:7px 4px 7px 0; border:0; background:transparent; color:#e8edffb7; text-align:left; font-size:13px; letter-spacing:.04em; cursor:pointer; transition:color .2s,text-shadow .2s; }
 .recap-toc-item:hover,.recap-toc-item.active { color:#fff; text-shadow:0 0 10px #d4e4ff90; }.recap-toc-star { flex:0 0 20px; color:#dceaffc2; font-size:13px; text-align:center; text-shadow:0 0 7px #d2e5ff75; }.recap-toc-item.active .recap-toc-star { color:#fff; font-size:18px; text-shadow:0 0 6px #fff,0 0 12px #c9deff; }
 .recap-scroll { position:absolute; top:94px; right:clamp(25px,5vw,76px); bottom:20px; left:clamp(230px,22vw,340px); overflow-y:auto; padding:18px 14px 36px; scrollbar-width:thin; scrollbar-color:#e6e1d6b5 transparent; }
@@ -261,14 +263,14 @@ function goBack() {
 .recap-message { grid-column:1 / -1; margin:0; color:#f1eee9bd; text-align:center; font-size:15px; line-height:1.8; }
 .recap-scroll::-webkit-scrollbar { width:3px; }.recap-scroll::-webkit-scrollbar-track { background:transparent; }.recap-scroll::-webkit-scrollbar-thumb { background:#e6e1d6b5; }
 @media (max-width:850px) and (orientation:landscape) {
-  .recap-header { height:54px; padding:0 24px; }.recap-back { width:34px;height:34px; }.recap-header-title strong { font-size:15px; }.recap-alignment-toggle { padding:6px 8px; gap:5px; font-size:11px; }.recap-alignment-toggle svg { width:13px; height:13px; }.recap-scroll { top:64px; right:18px; bottom:10px; left:22vw; padding:12px 10px 24px; }
-  .recap-toc { top:75px; bottom:16px; left:28px; width:17vw; padding-right:10px; }.recap-toc-title { margin-bottom:7px; padding-bottom:5px; font-size:11px; }.recap-toc-item { min-height:32px; gap:6px; font-size:11px; }.recap-toc-star { flex-basis:16px; font-size:11px; }
+  .recap-header { height:54px; padding:0 24px; }.recap-back { width:34px;height:34px; }.recap-header-title strong { font-size:15px; }.recap-alignment-toggle { padding:6px 8px; gap:5px; font-size:11px; }.recap-alignment-toggle svg { width:13px; height:13px; }.recap-scroll { top:64px; right:18px; bottom:10px; left:calc(27vw + 28px); padding:12px 10px 24px; }
+  .recap-toc { top:75px; bottom:16px; left:28px; width:22vw; padding-right:10px; }.recap-toc-title { margin-bottom:7px; padding-bottom:5px; font-size:11px; }.recap-toc-rail { top:16px; bottom:16px; }.recap-toc-item { min-height:32px; gap:6px; font-size:11px; }.recap-toc-star { flex-basis:16px; font-size:11px; }
   .recap-flow { grid-template-columns:minmax(0,1fr) minmax(0,1.1fr) minmax(0,1fr); column-gap:14px; row-gap:8px; }
   .recap-dialogue,.recap-narration { font-size:clamp(12px,2.2vh,16px); line-height:1.55; }.recap-speaker { margin-bottom:4px; }
 }
 @media (max-width:820px) and (orientation:portrait) {
-  .recap-header { height:54px; padding:0 24px; }.recap-back { width:34px;height:34px; }.recap-header-title strong { font-size:15px; }.recap-alignment-toggle { padding:6px 8px; gap:5px; font-size:11px; }.recap-alignment-toggle svg { width:13px; height:13px; }.recap-scroll { top:64px; right:18px; bottom:10px; left:22vw; padding:12px 10px 24px; }
-  .recap-toc { top:75px; bottom:16px; left:28px; width:17vw; padding-right:10px; }.recap-toc-title { margin-bottom:7px; padding-bottom:5px; font-size:11px; }.recap-toc-item { min-height:32px; gap:6px; font-size:11px; }.recap-toc-star { flex-basis:16px; font-size:11px; }
+  .recap-header { height:54px; padding:0 24px; }.recap-back { width:34px;height:34px; }.recap-header-title strong { font-size:15px; }.recap-alignment-toggle { padding:6px 8px; gap:5px; font-size:11px; }.recap-alignment-toggle svg { width:13px; height:13px; }.recap-scroll { top:64px; right:18px; bottom:10px; left:calc(27vw + 28px); padding:12px 10px 24px; }
+  .recap-toc { top:75px; bottom:16px; left:28px; width:22vw; padding-right:10px; }.recap-toc-title { margin-bottom:7px; padding-bottom:5px; font-size:11px; }.recap-toc-rail { top:16px; bottom:16px; }.recap-toc-item { min-height:32px; gap:6px; font-size:11px; }.recap-toc-star { flex-basis:16px; font-size:11px; }
   .recap-flow { grid-template-columns:minmax(0,1fr) minmax(0,1.1fr) minmax(0,1fr); column-gap:14px; row-gap:8px; }
   .recap-dialogue,.recap-narration { font-size:clamp(12px,2.2vh,16px); line-height:1.55; }.recap-speaker { margin-bottom:4px; }
 }

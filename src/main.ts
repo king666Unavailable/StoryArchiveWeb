@@ -7,6 +7,7 @@ import WorldQuestPage from './pages/WorldQuestPage.vue'
 import QuestRecapPage from './pages/QuestRecapPage.vue'
 import SideShadowPage from './pages/SideShadowPage.vue'
 import InfiniteStoriesPage from './pages/InfiniteStoriesPage.vue'
+import '@fontsource-variable/noto-serif-sc/wght.css'
 import './styles/base.css'
 
 const router = createRouter({

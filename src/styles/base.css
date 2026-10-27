@@ -1,4 +1,4 @@
-:root { font-family: 'Noto Serif SC', 'Songti SC', 'STSong', serif; color: #f4f4f8; background: #0b1120; font-synthesis: none; text-rendering: optimizeLegibility; --ink: #f4f4f8; --muted: rgba(234,239,255,.65); --line: rgba(231,239,255,.34); --glass: rgba(224,233,255,.12); --mono: 'DM Mono', Consolas, monospace; }
+:root { font-family: 'Noto Serif SC Variable', 'Noto Serif SC', 'Songti SC', 'STSong', serif; color: #f4f4f8; background: #0b1120; font-synthesis: none; text-rendering: optimizeLegibility; --ink: #f4f4f8; --muted: rgba(234,239,255,.65); --line: rgba(231,239,255,.34); --glass: rgba(224,233,255,.12); --mono: 'DM Mono', Consolas, monospace; }
 * { box-sizing: border-box; }
 html, body, #app { width: 100%; min-width: 320px; height: 100%; min-height: 100%; margin: 0; overflow: hidden; }
 body { background: #0b1120; }

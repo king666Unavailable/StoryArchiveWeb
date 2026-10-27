@@ -26,3 +26,25 @@ npm run build
 ```
 
 构建结果输出到 `dist/`。
+
+## 更新 Ubuntu 服务器
+
+本地修改完成后，先提交并推送到 GitHub：
+
+```bash
+git add .
+git commit -m "描述本次修改"
+git push
+```
+
+然后 SSH 登录 Ubuntu 服务器，拉取最新代码、重新构建并更新 Nginx 网站目录：
+
+```bash
+cd ~/StoryArchiveWeb
+git pull
+npm ci
+npm run build
+sudo cp -r dist/. /var/www/story-world-hub/
+```
+
+构建成功后刷新浏览器即可。网站通过 Nginx 的 25717 端口访问；通常更新静态文件后不需要重启 Nginx。
