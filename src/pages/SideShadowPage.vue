@@ -34,7 +34,7 @@ const selectedCategory = ref('shadow')
 </template>
 
 <style scoped>
-.side-shadow-page { position:absolute; inset:0; overflow:hidden; color:#fff; isolation:isolate; background:#12172d url('/backgrounds/shadow-gallery-no-text2.png') center / cover no-repeat; }
+.side-shadow-page { position:absolute; inset:0; overflow:hidden; color:#fff; isolation:isolate; background:#12172d url('/backgrounds/shadow-gallery-no-text2.webp') center / cover no-repeat; }
 .shadow-backdrop-vignette { position:absolute; inset:0; z-index:0; pointer-events:none; background:linear-gradient(180deg,rgba(7,11,25,.22),transparent 26%,transparent 72%,rgba(7,11,25,.22)),linear-gradient(90deg,rgba(7,11,25,.1),transparent 45%,rgba(7,11,25,.1)); }
 .quest-header { position:absolute; z-index:5; top:0; left:0; right:0; height:76px; padding:0 clamp(24px,4.7vw,78px); display:flex; align-items:center; gap:13px; border-bottom:1px solid rgba(228,237,255,.12); background:linear-gradient(180deg,rgba(9,14,33,.44),rgba(9,14,33,.08)); }
 .quest-back { width:42px; height:42px; display:grid; place-items:center; color:#f4f6ff; border:1px solid #eef4ff85; border-radius:4px; background:#dfeaff10; box-shadow:0 0 18px #c7dcff18; text-decoration:none; cursor:pointer; }.quest-back svg { width:27px; height:27px; fill:none; stroke:currentColor; stroke-width:1.3; stroke-linecap:round; stroke-linejoin:round; }

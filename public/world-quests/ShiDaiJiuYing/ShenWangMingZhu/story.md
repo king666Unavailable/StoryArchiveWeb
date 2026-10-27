@@ -3,7 +3,7 @@ title: 重拾神王明珠
 description: 前往南州国，为王朝重拾神王明珠。
 period: 他的游戏前约6年
 character: "柏源"
-image: images/nanZhou2.png
+image: images/nanZhou2.webp
 avatar: images/baiyuan.png
 type: world_quests
 ---

@@ -3,7 +3,7 @@ title: 心想事成
 description: 实现任务对象不同人生阶段的三个愿望。
 period: 他的游戏后？？？年
 character: "柏源"
-image: images/nanZhou22.png
+image: images/nanZhou22.webp
 avatar: images/baiyuan2.png
 type: world_quests
 ---
