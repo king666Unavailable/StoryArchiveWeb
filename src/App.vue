@@ -1,0 +1,112 @@
+<script setup lang="ts">
+import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router'
+import BottomDock from './components/BottomDock.vue'
+import type { Hotspot } from './content/navigation'
+
+const route = useRoute()
+const router = useRouter()
+const onArchive = computed(() => route.name === 'archive')
+const isWorldQuestPage = computed(() => route.name === 'world-quests' || route.name === 'world-quest-recap')
+const isSideShadowPage = computed(() => route.name === 'side-shadows')
+const isInfiniteStoriesPage = computed(() => route.name === 'infinite-stories')
+const isImmersivePage = computed(() => isWorldQuestPage.value || isSideShadowPage.value || isInfiniteStoriesPage.value)
+const activeHotspot = ref<Hotspot | null>(null)
+const isPortraitPhone = ref(false)
+
+function syncOrientation() {
+  isPortraitPhone.value = window.matchMedia('(max-width: 820px) and (orientation: portrait)').matches
+}
+
+function switchScene() {
+  activeHotspot.value = null
+  router.push(onArchive.value ? '/' : '/archive')
+}
+
+function handleHotspot(item: Hotspot) {
+  if (item.id === 'world-quests') {
+    activeHotspot.value = null
+    router.push('/world-quests')
+    return
+  }
+  if (item.id === 'side-story') {
+    activeHotspot.value = null
+    router.push('/side-shadows')
+    return
+  }
+  if (item.id === 'infinite') {
+    activeHotspot.value = null
+    router.push('/infinite-stories')
+    return
+  }
+  activeHotspot.value = item
+}
+
+function onKeydown(event: KeyboardEvent) {
+  if (event.key === 'Escape') activeHotspot.value = null
+  if (!isImmersivePage.value && (event.key === 'ArrowLeft' || event.key === 'ArrowRight')) switchScene()
+}
+
+onMounted(() => {
+  syncOrientation()
+  window.addEventListener('resize', syncOrientation)
+  window.addEventListener('orientationchange', syncOrientation)
+  window.addEventListener('keydown', onKeydown)
+})
+onUnmounted(() => {
+  window.removeEventListener('resize', syncOrientation)
+  window.removeEventListener('orientationchange', syncOrientation)
+  window.removeEventListener('keydown', onKeydown)
+})
+</script>
+
+<template>
+  <main class="app-frame" :class="{ 'is-archive': onArchive, 'is-world-quest-page': isWorldQuestPage, 'is-side-shadow-page': isSideShadowPage, 'is-infinite-stories-page': isInfiniteStoriesPage, 'is-quest-recap': route.name === 'world-quest-recap', 'is-portrait-phone': isPortraitPhone }">
+    <div class="ambient-grain" aria-hidden="true"></div>
+
+    <header v-if="!isImmersivePage" class="topbar">
+      <RouterLink class="brand" to="/" aria-label="世界之外资料站首页">
+        <span class="brand-lockup"><span class="brand-title">世界之外资料站</span><span class="brand-tagline">Here to Everywhere</span></span>
+      </RouterLink>
+
+      <nav class="main-nav" aria-label="主导航">
+        <RouterLink to="/" :class="{ active: !onArchive }"><span>01</span> 现实世界</RouterLink>
+        <RouterLink to="/archive" :class="{ active: onArchive }"><span>02</span> 主神空间</RouterLink>
+        <a href="#reading" @click.prevent="activeHotspot = { id: 'reading', title: '阅读档案', eyebrow: 'READING ROOM', description: '作品目录与阅读入口会在这里展开。', x: 50, y: 50 }"><span>03</span> 阅读档案</a>
+      </nav>
+
+      <div class="top-meta"><span class="status-dot"></span><span>LOADING</span></div>
+    </header>
+
+    <section class="scene-wrap">
+      <RouterView v-slot="{ Component }">
+        <Transition name="scene-fade" mode="out-in">
+          <component :is="Component" :key="route.fullPath" @activate="handleHotspot" @back="router.push('/archive')" />
+        </Transition>
+      </RouterView>
+
+      <button v-if="!isImmersivePage" class="scene-arrow arrow-left" aria-label="切换到上一个场景" @click="switchScene">
+        <span class="arrow-caption">PREVIOUS<br />SCENE</span><span class="arrow-glyph" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M7 6 41 24 7 42 17 24 7 6Z" /><path d="M2 24h16" /></svg></span>
+      </button>
+      <button v-if="!isImmersivePage" class="scene-arrow arrow-right" aria-label="切换到下一个场景" @click="switchScene">
+        <span class="arrow-caption">NEXT<br />SCENE</span><span class="arrow-glyph" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M7 6 41 24 7 42 17 24 7 6Z" /><path d="M2 24h16" /></svg></span>
+      </button>
+    </section>
+
+    <BottomDock v-if="!isImmersivePage" :active="onArchive ? 'archive' : 'city'" @activate="handleHotspot" />
+
+    <Transition name="panel">
+      <div v-if="activeHotspot" class="detail-scrim" @click.self="activeHotspot = null">
+        <section class="detail-card" role="dialog" aria-modal="true" :aria-label="activeHotspot.title">
+          <button class="detail-close" aria-label="关闭" @click="activeHotspot = null">×</button>
+          <p class="detail-kicker">{{ activeHotspot.eyebrow || 'STORY ARCHIVE' }}</p>
+          <h2>{{ activeHotspot.title }}</h2>
+          <p class="detail-description">{{ activeHotspot.description }}</p>
+          <div class="detail-rule"><span></span><i>✦</i><span></span></div>
+          <p class="detail-note">功能入口原型 · 后续可连接到作品、章节或系列页面</p>
+        </section>
+      </div>
+    </Transition>
+
+  </main>
+</template>
