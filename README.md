@@ -41,7 +41,7 @@ git push
 
 ```bash
 cd ~/StoryArchiveWeb
-git pull
+git pull --progress
 npm ci
 npm run build
 sudo cp -r dist/. /var/www/story-world-hub/
