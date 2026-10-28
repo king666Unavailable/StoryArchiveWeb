@@ -3,7 +3,7 @@ import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router'
 import BottomDock from './components/BottomDock.vue'
 import type { Hotspot } from './content/navigation'
-import { loadReaderProfile, saveReaderProfile } from './content/readerProfile'
+import { loadReaderNamePromptEnabled, loadReaderProfile, saveReaderNamePromptEnabled, saveReaderProfile } from './content/readerProfile'
 
 const route = useRoute()
 const router = useRouter()
@@ -15,6 +15,7 @@ const isImmersivePage = computed(() => isWorldQuestPage.value || isSideShadowPag
 const activeHotspot = ref<Hotspot | null>(null)
 const isPortraitPhone = ref(false)
 const savedReaderProfile = ref(loadReaderProfile())
+const readerNamePromptEnabled = ref(loadReaderNamePromptEnabled())
 const draftLastname = ref('')
 const draftFirstName = ref('')
 
@@ -45,6 +46,7 @@ function handleHotspot(item: Hotspot) {
   }
   if (item.id === 'profile') {
     savedReaderProfile.value = loadReaderProfile()
+    readerNamePromptEnabled.value = loadReaderNamePromptEnabled()
     draftLastname.value = savedReaderProfile.value.userLastname
     draftFirstName.value = savedReaderProfile.value.userFirstName
   }
@@ -61,6 +63,10 @@ function confirmReaderProfile() {
     userFirstName: draftFirstName.value,
   })
   closeHotspot()
+}
+
+function updateReaderNamePromptPreference() {
+  saveReaderNamePromptEnabled(readerNamePromptEnabled.value)
 }
 
 function onKeydown(event: KeyboardEvent) {
@@ -139,9 +145,15 @@ onUnmounted(() => {
                 <i aria-hidden="true"></i>
               </label>
             </div>
-            <div class="profile-actions">
-              <button class="profile-reject" type="button" @click="closeHotspot">拒绝</button>
-              <button class="profile-confirm" type="button" @click="confirmReaderProfile">确认</button>
+            <div class="profile-footer">
+              <label class="profile-prompt-setting">
+                <input v-model="readerNamePromptEnabled" type="checkbox" @change="updateReaderNamePromptPreference">
+                <span>进入剧情前提示</span>
+              </label>
+              <div class="profile-actions">
+                <button class="profile-reject" type="button" @click="closeHotspot">拒绝</button>
+                <button class="profile-confirm" type="button" @click="confirmReaderProfile">确认</button>
+              </div>
             </div>
           </template>
           <template v-else>

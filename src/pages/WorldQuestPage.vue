@@ -3,7 +3,7 @@ import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { worldQuestTopics } from '../content/worldQuests'
 import { loadWorldQuestTopics, type WorldQuest, type WorldQuestTopic } from '../content/worldQuestLoader'
-import { hasReaderNameVariables } from '../content/readerProfile'
+import { hasReaderNameVariables, loadReaderNamePromptEnabled } from '../content/readerProfile'
 import ReaderNamePrompt from '../components/ReaderNamePrompt.vue'
 
 defineEmits<{ back: [] }>()
@@ -41,7 +41,7 @@ function chooseTopic(topicId: string) {
 }
 
 function enterRecap() {
-  if (hasReaderNameVariables(selectedQuest.value.body)) {
+  if (loadReaderNamePromptEnabled() && hasReaderNameVariables(selectedQuest.value.body)) {
     namePromptOpen.value = true
     return
   }

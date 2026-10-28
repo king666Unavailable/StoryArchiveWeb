@@ -3,7 +3,7 @@ import { computed, onMounted, ref } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import { infiniteStoryTopics } from '../content/infiniteStories'
 import { loadInfiniteStories, type InfiniteStory } from '../content/worldQuestLoader'
-import { hasReaderNameVariables } from '../content/readerProfile'
+import { hasReaderNameVariables, loadReaderNamePromptEnabled } from '../content/readerProfile'
 import ReaderNamePrompt from '../components/ReaderNamePrompt.vue'
 
 const stories = ref<InfiniteStory[]>([])
@@ -54,7 +54,7 @@ function enterRecap(subfolderId: string) {
   sessionStorage.setItem('infinite-stories:last-topic', selectedTopic.value!.id)
   sessionStorage.setItem('infinite-stories:last-subfolder', subfolderId)
   const story = stories.value.find((item) => item.topicId === selectedTopic.value!.id && item.id === subfolderId)
-  if (story && hasReaderNameVariables(story.body)) {
+  if (loadReaderNamePromptEnabled() && story && hasReaderNameVariables(story.body)) {
     pendingSubfolderId.value = subfolderId
     namePromptOpen.value = true
     return

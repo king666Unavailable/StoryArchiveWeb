@@ -1,5 +1,13 @@
 <script setup lang="ts">
+import { ref } from 'vue'
+import { loadReaderNamePromptEnabled, saveReaderNamePromptEnabled } from '../content/readerProfile'
+
 defineEmits<{ continue: []; cancel: [] }>()
+const dontPromptAgain = ref(!loadReaderNamePromptEnabled())
+
+function updatePromptPreference() {
+  saveReaderNamePromptEnabled(!dontPromptAgain.value)
+}
 </script>
 
 <template>
@@ -10,9 +18,15 @@ defineEmits<{ continue: []; cancel: [] }>()
       <p class="reader-name-message">这篇剧情涉及玩家姓名。<br>如有需要，请返回主页右下角的“拾录者”修改</p>
       <div class="reader-name-rule" aria-hidden="true"><span></span><i>✦</i><span></span></div>
       <p class="reader-name-note">如果没有填写，正文会直接显示变量名</p>
-      <div class="reader-name-actions">
-        <button type="button" class="reader-name-cancel" @click="$emit('cancel')">返回</button>
-        <button type="button" class="reader-name-continue" @click="$emit('continue')">继续阅读</button>
+      <div class="reader-name-footer">
+        <label class="reader-name-disable">
+          <input v-model="dontPromptAgain" type="checkbox" @change="updatePromptPreference">
+          <span>下次不再提示</span>
+        </label>
+        <div class="reader-name-actions">
+          <button type="button" class="reader-name-cancel" @click="$emit('cancel')">返回</button>
+          <button type="button" class="reader-name-continue" @click="$emit('continue')">继续阅读</button>
+        </div>
       </div>
     </section>
   </div>
@@ -27,7 +41,8 @@ defineEmits<{ continue: []; cancel: [] }>()
 .reader-name-message { max-width:560px; margin:0; color:#f1f0eced; font-size:clamp(14px,1.6vw,17px); line-height:1.9; letter-spacing:.035em; }
 .reader-name-rule { display:flex; align-items:center; justify-content:center; gap:15px; width:min(250px,70%); margin:25px auto 21px; color:#c7ebff; font-size:14px; text-shadow:0 0 10px #d8edff99; }.reader-name-rule span { flex:1; height:1px; background:linear-gradient(90deg,transparent,#d8edff99); }.reader-name-rule span:last-child { transform:rotate(180deg); }.reader-name-rule i { font-style:normal; }
 .reader-name-prompt .reader-name-note { margin:0; color:#d9e1f0b8; font-size:14px; line-height:1.7; letter-spacing:.04em; }
-.reader-name-actions { display:flex; justify-content:center; gap:28px; width:100%; margin-top:auto; padding-top:30px; }.reader-name-actions button { min-width:112px; padding:9px 14px; border:1px solid #e5efff62; background:#e4edff0c; color:#f6f4ef; font-size:14px; letter-spacing:.08em; transition:background .2s,border-color .2s; }.reader-name-actions button:hover { border-color:#eef4ffb0; background:#e4edff22; }.reader-name-continue { box-shadow:inset 0 0 14px #dce8ff10; }
-@media (max-width:850px) and (orientation:landscape) { .reader-name-scrim { padding:10px; }.reader-name-prompt { width:min(520px,92%); max-height:calc(100dvh - 20px); overflow-y:auto; padding:24px 28px 16px; }.reader-name-close { top:6px;right:8px;font-size:26px; }.reader-name-prompt h2 { margin-bottom:8px;font-size:clamp(19px,3.5vh,25px); }.reader-name-message { font-size:clamp(11px,2.2vh,14px);line-height:1.5; }.reader-name-rule { margin:10px auto 8px;font-size:11px; }.reader-name-prompt .reader-name-note { font-size:11px;line-height:1.5; }.reader-name-actions { gap:18px;padding-top:12px; }.reader-name-actions button { min-width:90px;padding:6px 10px;font-size:11px; } }
-@media (max-width:820px) and (orientation:portrait) { .reader-name-scrim { padding:10px; } :global(.app-frame.is-portrait-phone) .reader-name-prompt { width:min(520px,90vh); max-height:calc(100dvh - 20px); overflow-y:auto; padding:24px 28px 16px; }.reader-name-close { top:6px;right:8px;font-size:26px; }.reader-name-prompt h2 { margin-bottom:8px;font-size:clamp(19px,3.5vh,25px); }.reader-name-message { font-size:clamp(11px,2.2vh,14px);line-height:1.5; }.reader-name-rule { margin:10px auto 8px;font-size:11px; }.reader-name-prompt .reader-name-note { font-size:11px;line-height:1.5; }.reader-name-actions { gap:18px;padding-top:12px; }.reader-name-actions button { min-width:90px;padding:6px 10px;font-size:11px; } }
+.reader-name-footer { display:grid; grid-template-columns:1fr auto 1fr; align-items:center; width:100%; margin-top:auto; padding-top:30px; }.reader-name-disable { grid-column:1; justify-self:start; display:flex; align-items:center; gap:7px; color:#e4e9f2c9; font-size:12px; letter-spacing:.025em; white-space:nowrap; cursor:pointer; }.reader-name-disable input,.profile-prompt-setting input { width:14px; height:14px; margin:0; accent-color:#c8def8; }
+.reader-name-actions { grid-column:2; display:flex; justify-content:center; gap:28px; width:auto; margin:0; padding:0; }.reader-name-actions button { min-width:112px; padding:9px 14px; border:1px solid #e5efff62; background:#e4edff0c; color:#f6f4ef; font-size:14px; letter-spacing:.08em; transition:background .2s,border-color .2s; }.reader-name-actions button:hover { border-color:#eef4ffb0; background:#e4edff22; }.reader-name-continue { box-shadow:inset 0 0 14px #dce8ff10; }
+@media (max-width:850px) and (orientation:landscape) { .reader-name-scrim { padding:10px; }.reader-name-prompt { width:min(520px,92%); max-height:calc(100dvh - 20px); overflow-y:auto; padding:24px 28px 16px; }.reader-name-close { top:6px;right:8px;font-size:26px; }.reader-name-prompt h2 { margin-bottom:8px;font-size:clamp(19px,3.5vh,25px); }.reader-name-message { font-size:clamp(11px,2.2vh,14px);line-height:1.5; }.reader-name-rule { margin:10px auto 8px;font-size:11px; }.reader-name-prompt .reader-name-note { font-size:11px;line-height:1.5; }.reader-name-footer { grid-template-columns:1fr auto 1fr;padding-top:12px; }.reader-name-disable { gap:4px;font-size:10px; }.reader-name-disable input { width:12px;height:12px; }.reader-name-actions { gap:18px; }.reader-name-actions button { min-width:90px;padding:6px 10px;font-size:11px; } }
+@media (max-width:820px) and (orientation:portrait) { .reader-name-scrim { padding:10px; } :global(.app-frame.is-portrait-phone) .reader-name-prompt { width:min(520px,90vh); max-height:calc(100dvh - 20px); overflow-y:auto; padding:24px 28px 16px; }.reader-name-close { top:6px;right:8px;font-size:26px; }.reader-name-prompt h2 { margin-bottom:8px;font-size:clamp(19px,3.5vh,25px); }.reader-name-message { font-size:clamp(11px,2.2vh,14px);line-height:1.5; }.reader-name-rule { margin:10px auto 8px;font-size:11px; }.reader-name-prompt .reader-name-note { font-size:11px;line-height:1.5; }.reader-name-footer { display:flex;flex-direction:column;align-items:center;gap:10px;padding-top:12px; }.reader-name-disable { align-self:flex-start;gap:4px;font-size:10px; }.reader-name-disable input { width:12px;height:12px; }.reader-name-actions { gap:18px; }.reader-name-actions button { min-width:90px;padding:6px 10px;font-size:11px; } }
 </style>
