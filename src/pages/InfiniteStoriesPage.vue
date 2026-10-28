@@ -3,11 +3,15 @@ import { computed, onMounted, ref } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import { infiniteStoryTopics } from '../content/infiniteStories'
 import { loadInfiniteStories, type InfiniteStory } from '../content/worldQuestLoader'
+import { hasReaderNameVariables } from '../content/readerProfile'
+import ReaderNamePrompt from '../components/ReaderNamePrompt.vue'
 
 const stories = ref<InfiniteStory[]>([])
 const selectedTopicId = ref(infiniteStoryTopics[0]?.id ?? '')
 const selectedSubfolderId = ref(infiniteStoryTopics[0]?.subfolderIds[0] ?? '')
 const themeImageMissing = ref(false)
+const namePromptOpen = ref(false)
+const pendingSubfolderId = ref('')
 const router = useRouter()
 const selectedTopic = computed(() => infiniteStoryTopics.find((topic) => topic.id === selectedTopicId.value) ?? infiniteStoryTopics[0] ?? null)
 const themeImage = computed(() => selectedTopic.value ? `/infinite_stories/${selectedTopic.value.id}/theme2.webp` : '')
@@ -49,9 +53,21 @@ function enterRecap(subfolderId: string) {
   selectedSubfolderId.value = subfolderId
   sessionStorage.setItem('infinite-stories:last-topic', selectedTopic.value!.id)
   sessionStorage.setItem('infinite-stories:last-subfolder', subfolderId)
+  const story = stories.value.find((item) => item.topicId === selectedTopic.value!.id && item.id === subfolderId)
+  if (story && hasReaderNameVariables(story.body)) {
+    pendingSubfolderId.value = subfolderId
+    namePromptOpen.value = true
+    return
+  }
+  continueToRecap(subfolderId)
+}
+
+function continueToRecap(subfolderId = pendingSubfolderId.value) {
+  namePromptOpen.value = false
+  if (!subfolderId || !selectedTopic.value) return
   router.push({
     name: 'world-quest-recap',
-    params: { topicId: selectedTopic.value!.id, questId: subfolderId },
+    params: { topicId: selectedTopic.value.id, questId: subfolderId },
     query: { source: 'infinite-stories' },
   })
 }
@@ -136,6 +152,8 @@ function onThemeImageError() {
         </button>
       </nav>
     </template>
+
+    <ReaderNamePrompt v-if="namePromptOpen" @continue="continueToRecap" @cancel="namePromptOpen = false" />
   </section>
 </template>
 

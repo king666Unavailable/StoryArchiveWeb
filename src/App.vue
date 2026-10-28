@@ -3,6 +3,7 @@ import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router'
 import BottomDock from './components/BottomDock.vue'
 import type { Hotspot } from './content/navigation'
+import { loadReaderProfile, saveReaderProfile } from './content/readerProfile'
 
 const route = useRoute()
 const router = useRouter()
@@ -13,6 +14,9 @@ const isInfiniteStoriesPage = computed(() => route.name === 'infinite-stories')
 const isImmersivePage = computed(() => isWorldQuestPage.value || isSideShadowPage.value || isInfiniteStoriesPage.value)
 const activeHotspot = ref<Hotspot | null>(null)
 const isPortraitPhone = ref(false)
+const savedReaderProfile = ref(loadReaderProfile())
+const draftLastname = ref('')
+const draftFirstName = ref('')
 
 function syncOrientation() {
   isPortraitPhone.value = window.matchMedia('(max-width: 820px) and (orientation: portrait)').matches
@@ -39,7 +43,24 @@ function handleHotspot(item: Hotspot) {
     router.push('/infinite-stories')
     return
   }
+  if (item.id === 'profile') {
+    savedReaderProfile.value = loadReaderProfile()
+    draftLastname.value = savedReaderProfile.value.userLastname
+    draftFirstName.value = savedReaderProfile.value.userFirstName
+  }
   activeHotspot.value = item
+}
+
+function closeHotspot() {
+  activeHotspot.value = null
+}
+
+function confirmReaderProfile() {
+  savedReaderProfile.value = saveReaderProfile({
+    userLastname: draftLastname.value,
+    userFirstName: draftFirstName.value,
+  })
+  closeHotspot()
 }
 
 function onKeydown(event: KeyboardEvent) {
@@ -96,14 +117,40 @@ onUnmounted(() => {
     <BottomDock v-if="!isImmersivePage" :active="onArchive ? 'archive' : 'city'" @activate="handleHotspot" />
 
     <Transition name="panel">
-      <div v-if="activeHotspot" class="detail-scrim" @click.self="activeHotspot = null">
-        <section class="detail-card" role="dialog" aria-modal="true" :aria-label="activeHotspot.title">
-          <button class="detail-close" aria-label="关闭" @click="activeHotspot = null">×</button>
-          <p class="detail-kicker">{{ activeHotspot.eyebrow || 'STORY ARCHIVE' }}</p>
-          <h2>{{ activeHotspot.title }}</h2>
-          <p class="detail-description">{{ activeHotspot.description }}</p>
-          <div class="detail-rule"><span></span><i>✦</i><span></span></div>
-          <p class="detail-note">功能入口原型 · 后续可连接到作品、章节或系列页面</p>
+      <div v-if="activeHotspot" class="detail-scrim" :class="{ 'profile-scrim': activeHotspot.id === 'profile' }" @click.self="closeHotspot">
+        <section class="detail-card" :class="{ 'profile-card': activeHotspot.id === 'profile' }" role="dialog" aria-modal="true" :aria-label="activeHotspot.title">
+          <button v-if="activeHotspot.id !== 'profile'" class="detail-close" aria-label="关闭" @click="closeHotspot">×</button>
+          <template v-if="activeHotspot.id === 'profile'">
+            <h2 class="profile-title">是否<span>确认</span>加入无限世界的游戏？</h2>
+            <div class="profile-warning">
+              <p>在这里，你将有可能获得超越现实的能力，发现世界的真谛</p>
+              <p>而一旦失败，你将失去一切，永困轮回</p>
+            </div>
+            <p class="profile-invitation">如确认，请在此签署你的姓名</p>
+            <div class="profile-fields">
+              <label class="profile-field">
+                <span>姓</span>
+                <input v-model="draftLastname" type="text" autocomplete="family-name" aria-label="姓" />
+                <i aria-hidden="true"></i>
+              </label>
+              <label class="profile-field">
+                <span>名</span>
+                <input v-model="draftFirstName" type="text" autocomplete="given-name" aria-label="名" />
+                <i aria-hidden="true"></i>
+              </label>
+            </div>
+            <div class="profile-actions">
+              <button class="profile-reject" type="button" @click="closeHotspot">拒绝</button>
+              <button class="profile-confirm" type="button" @click="confirmReaderProfile">确认</button>
+            </div>
+          </template>
+          <template v-else>
+            <p class="detail-kicker">{{ activeHotspot.eyebrow || 'STORY ARCHIVE' }}</p>
+            <h2>{{ activeHotspot.title }}</h2>
+            <p class="detail-description">{{ activeHotspot.description }}</p>
+            <div class="detail-rule"><span></span><i>✦</i><span></span></div>
+            <p class="detail-note">功能入口原型 · 后续可连接到作品、章节或系列页面</p>
+          </template>
         </section>
       </div>
     </Transition>

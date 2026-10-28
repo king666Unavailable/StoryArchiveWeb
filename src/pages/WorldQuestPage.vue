@@ -3,6 +3,8 @@ import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { worldQuestTopics } from '../content/worldQuests'
 import { loadWorldQuestTopics, type WorldQuest, type WorldQuestTopic } from '../content/worldQuestLoader'
+import { hasReaderNameVariables } from '../content/readerProfile'
+import ReaderNamePrompt from '../components/ReaderNamePrompt.vue'
 
 defineEmits<{ back: [] }>()
 
@@ -11,6 +13,7 @@ const router = useRouter()
 const topics = ref<WorldQuestTopic[]>(worldQuestTopics.map(({ id, title }) => ({ id, title, quests: [] })))
 const selectedTopicId = ref(worldQuestTopics[0].id)
 const topicMenuOpen = ref(false)
+const namePromptOpen = ref(false)
 const selectedQuestId = ref(worldQuestTopics[0].questIds[0])
 const loadingQuest: WorldQuest = { id: 'loading', type: 'world_quests', title: '读取中…', description: '', period: '', character: '', image: '', avatar: '', body: '' }
 
@@ -38,6 +41,15 @@ function chooseTopic(topicId: string) {
 }
 
 function enterRecap() {
+  if (hasReaderNameVariables(selectedQuest.value.body)) {
+    namePromptOpen.value = true
+    return
+  }
+  continueToRecap()
+}
+
+function continueToRecap() {
+  namePromptOpen.value = false
   router.push({ name: 'world-quest-recap', params: { topicId: selectedTopic.value.id, questId: selectedQuest.value.id } })
 }
 
@@ -113,6 +125,8 @@ function enterRecap() {
         </div>
       </Transition>
     </section>
+
+    <ReaderNamePrompt v-if="namePromptOpen" @continue="continueToRecap" @cancel="namePromptOpen = false" />
 
   </section>
 </template>
