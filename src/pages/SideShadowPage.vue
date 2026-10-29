@@ -1,12 +1,25 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
-import { RouterLink } from 'vue-router'
-import { getSideShadowThumbnail, loadSideShadows, type SideShadow } from '../content/sideShadows'
+import { computed, onMounted, ref, watch } from 'vue'
+import { RouterLink, useRoute } from 'vue-router'
+import {
+  createSideShadowFilterContextId,
+  getActiveSideShadowFilterContextId,
+  getSideShadowThumbnail,
+  loadSideShadowFilterContext,
+  loadSideShadows,
+  saveSideShadowFilterContext,
+  type SideShadow,
+  type SideShadowFilterContext,
+  type SideShadowFilterKey,
+  type SideShadowFilterSort,
+  type SideShadowFilterState,
+} from '../content/sideShadows'
 
-type FilterKey = 'rarity' | 'world' | 'attribute' | 'character'
-type FilterState = Record<FilterKey, string[]>
+type FilterKey = SideShadowFilterKey
+type FilterState = SideShadowFilterState
 
 const categoryTitle = '侧影'
+const route = useRoute()
 const rarityOptions = ['刹那', '世界', '瞬', '月', '辰星', '星']
 const mainAttributeOptions = ['思维', '魅力', '体魄', '感知', '灵巧']
 
@@ -51,7 +64,23 @@ function emptyFilters(): FilterState {
 }
 
 const selectedFilters = ref<FilterState>(emptyFilters())
-const sortOrder = ref<'rarity-desc' | 'rarity-asc' | 'name'>('rarity-desc')
+const sortOrder = ref<SideShadowFilterSort>('rarity-desc')
+const contextFromRoute = typeof route.query.context === 'string' ? route.query.context : ''
+const contextId = ref(contextFromRoute || getActiveSideShadowFilterContextId() || createSideShadowFilterContextId())
+const savedContext = loadSideShadowFilterContext(contextId.value)
+if (savedContext) {
+  selectedFilters.value = savedContext.filters
+  sortOrder.value = savedContext.sortOrder
+}
+
+function persistFilterContext() {
+  const context: SideShadowFilterContext = {
+    resultIds: filteredCards.value.map((card) => card.id),
+    filters: selectedFilters.value,
+    sortOrder: sortOrder.value,
+  }
+  saveSideShadowFilterContext(contextId.value, context)
+}
 
 onMounted(async () => {
   try {
@@ -96,6 +125,8 @@ const filteredCards = computed(() => {
     return sortOrder.value === 'rarity-desc' ? difference : -difference
   })
 })
+
+watch([filteredCards, selectedFilters, sortOrder], persistFilterContext, { deep: true, flush: 'sync' })
 </script>
 
 <template>
@@ -141,7 +172,7 @@ const filteredCards = computed(() => {
           <p v-if="isLoading" class="results-status">正在读取侧影资料…</p>
           <p v-else-if="loadError" class="results-status">侧影资料读取失败</p>
           <div v-else-if="filteredCards.length" class="shadow-card-grid">
-            <RouterLink v-for="card in filteredCards" :key="card.id" class="shadow-card" :to="{ name: 'side-shadow-detail', params: { worldId: card.worldId, characterId: card.characterId, shadowId: card.shadowId } }">
+            <RouterLink v-for="card in filteredCards" :key="card.id" class="shadow-card" :to="{ name: 'side-shadow-detail', params: { worldId: card.worldId, characterId: card.characterId, shadowId: card.shadowId }, query: { context: contextId } }">
               <img v-if="getSideShadowThumbnail(card)" class="card-thumbnail" :src="getSideShadowThumbnail(card)" :alt="`${card.title}缩略图`" loading="lazy" decoding="async">
               <img v-if="attributeIcon(card.mainAttribute)" class="card-attribute-icon" :src="attributeIcon(card.mainAttribute)" :alt="`${card.mainAttribute}属性`" loading="lazy" decoding="async">
               <img v-if="rarityIcon(card.rarity)" class="card-rarity-icon" :src="rarityIcon(card.rarity)" :alt="`${card.rarity}稀有度`" loading="lazy" decoding="async">
@@ -215,5 +246,8 @@ const filteredCards = computed(() => {
   .reset-filter-icon { width:26px; height:26px; font-size:18px; }
   .reset-filter-label { font-size:8px; }
   .character-name { font-size:10px; }
+  .card-attribute-icon { top:3px; left:4px; }
+  .card-rarity-icon { right:4px; }
+  .card-title { left:4.5px; bottom:3px; max-width:calc(100% - 9px); }
 }
 </style>

@@ -2,6 +2,7 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { loadWorldQuestTopics, type WorldQuest } from '../content/worldQuestLoader'
+import { loadSideShadowStories, loadSideShadows, type SideShadowStoryType } from '../content/sideShadows'
 import { loadReaderProfile } from '../content/readerProfile'
 
 type RecapEnding = { id: string; title: string; sectionId: string; choiceId: string; optionId: string }
@@ -22,7 +23,9 @@ const myDialogueAlignment = ref<'left' | 'right'>('right')
 const selectedChoices = ref<Record<string, string>>({})
 const readerProfile = ref(loadReaderProfile())
 const alignmentStorageKey = 'world-quest-recap:my-dialogue-alignment'
-const scrollStorageKey = computed(() => `world-quest-recap:${String(route.params.topicId)}:${String(route.params.questId)}`)
+const scrollStorageKey = computed(() => route.name === 'side-shadow-recap'
+  ? `world-quest-recap:side-shadow:${String(route.params.worldId)}:${String(route.params.characterId)}:${String(route.params.shadowId)}:${String(route.params.storyType)}`
+  : `world-quest-recap:${String(route.params.topicId)}:${String(route.params.questId)}`)
 const choiceStorageKey = computed(() => `${scrollStorageKey.value}:choices`)
 
 function cleanStoryText(text: string) {
@@ -365,9 +368,32 @@ onMounted(async () => {
   const savedAlignment = localStorage.getItem(alignmentStorageKey)
   if (savedAlignment === 'left' || savedAlignment === 'right') myDialogueAlignment.value = savedAlignment
   try {
-    const topics = await loadWorldQuestTopics()
-    const topic = topics.find((item) => item.id === String(route.params.topicId))
-    quest.value = topic?.quests.find((item) => item.id === String(route.params.questId)) ?? null
+    if (route.name === 'side-shadow-recap') {
+      const records = await loadSideShadows()
+      const shadow = records.find((item) =>
+        item.worldId === String(route.params.worldId)
+        && item.characterId === String(route.params.characterId)
+        && item.shadowId === String(route.params.shadowId))
+      const storyType = String(route.params.storyType) as SideShadowStoryType
+      const storySection = shadow ? (await loadSideShadowStories(shadow))[storyType] : undefined
+      if (shadow) {
+        quest.value = {
+          id: shadow.shadowId,
+          type: 'world_quests',
+          title: shadow.title,
+          description: '',
+          period: '',
+          character: shadow.character,
+          image: '',
+          avatar: '',
+          body: storySection ?? '',
+        }
+      }
+    } else {
+      const topics = await loadWorldQuestTopics()
+      const topic = topics.find((item) => item.id === String(route.params.topicId))
+      quest.value = topic?.quests.find((item) => item.id === String(route.params.questId)) ?? null
+    }
     if (!quest.value) loadError.value = '没有找到这篇回顾内容。'
     try {
       const savedChoices = sessionStorage.getItem(choiceStorageKey.value)
@@ -394,6 +420,18 @@ function toggleMyDialogueAlignment() {
 
 function goBack() {
   rememberScrollPosition()
+  if (route.name === 'side-shadow-recap') {
+    router.push({
+      name: 'side-shadow-detail',
+      params: {
+        worldId: String(route.params.worldId),
+        characterId: String(route.params.characterId),
+        shadowId: String(route.params.shadowId),
+      },
+      query: typeof route.query.context === 'string' ? { context: route.query.context } : {},
+    })
+    return
+  }
   if (route.query.source === 'infinite-stories') {
     router.push({ name: 'infinite-stories' })
     return

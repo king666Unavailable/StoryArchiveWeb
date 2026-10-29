@@ -39,6 +39,17 @@
           ]
         }
       ]
+    },
+    {
+      "id": "XianShiShiJie",
+      "characters": [
+        {
+          "id": "BaiYuan",
+          "shadows": [
+            "Chen"
+          ]
+        }
+      ]
     }
   ]
 }

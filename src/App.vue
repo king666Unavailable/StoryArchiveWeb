@@ -11,7 +11,8 @@ const onCity = computed(() => route.name === 'city')
 const onArchive = computed(() => route.name === 'archive')
 const onLeisure = computed(() => route.name === 'leisure')
 const isWorldQuestPage = computed(() => route.name === 'world-quests' || route.name === 'world-quest-recap')
-const isSideShadowPage = computed(() => route.name === 'side-shadows' || route.name === 'side-shadow-detail')
+const isSideShadowPage = computed(() => route.name === 'side-shadows' || route.name === 'side-shadow-detail' || route.name === 'side-shadow-recap')
+const isRecapPage = computed(() => route.name === 'world-quest-recap' || route.name === 'side-shadow-recap')
 const isInfiniteStoriesPage = computed(() => route.name === 'infinite-stories')
 const isImmersivePage = computed(() => isWorldQuestPage.value || isSideShadowPage.value || isInfiniteStoriesPage.value)
 const activeHotspot = ref<Hotspot | null>(null)
@@ -98,7 +99,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <main class="app-frame" :class="{ 'is-archive': onArchive, 'is-leisure': onLeisure, 'is-world-quest-page': isWorldQuestPage, 'is-side-shadow-page': isSideShadowPage, 'is-infinite-stories-page': isInfiniteStoriesPage, 'is-quest-recap': route.name === 'world-quest-recap', 'is-portrait-phone': isPortraitPhone }">
+  <main class="app-frame" :class="{ 'is-archive': onArchive, 'is-leisure': onLeisure, 'is-world-quest-page': isWorldQuestPage, 'is-side-shadow-page': isSideShadowPage, 'is-infinite-stories-page': isInfiniteStoriesPage, 'is-quest-recap': isRecapPage, 'is-portrait-phone': isPortraitPhone }">
     <div class="ambient-grain" aria-hidden="true"></div>
 
     <header v-if="!isImmersivePage" class="topbar">

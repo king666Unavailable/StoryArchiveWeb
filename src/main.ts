@@ -22,6 +22,7 @@ const router = createRouter({
     { path: '/world-quests/:topicId/:questId/recap', name: 'world-quest-recap', component: QuestRecapPage },
     { path: '/side-shadows', name: 'side-shadows', component: SideShadowPage },
     { path: '/side-shadows/:worldId/:characterId/:shadowId', name: 'side-shadow-detail', component: SideShadowDetailPage },
+    { path: '/side-shadows/:worldId/:characterId/:shadowId/recap/:storyType', name: 'side-shadow-recap', component: QuestRecapPage },
     { path: '/infinite-stories', name: 'infinite-stories', component: InfiniteStoriesPage },
     { path: '/:pathMatch(.*)*', redirect: '/' },
   ],

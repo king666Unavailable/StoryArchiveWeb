@@ -8,4 +8,5 @@ rarity: "世界"
 mainAttribute: "体魄"
 world: "时代旧影"
 character: "柏源"
+meet: "我永远在你身后，而一切会如你所愿。"
 ---
