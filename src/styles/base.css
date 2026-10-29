@@ -39,8 +39,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid #fff; outline-offset:
 .arrow-glyph { width: 56px; height: 56px; display: grid; place-items: center; color: white; transition: transform .25s, filter .25s; }
 .arrow-glyph svg { display: block; width: 100%; height: 100%; overflow: visible; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 0 5px #e6f2ff) drop-shadow(0 2px 5px #15223d); }
 .arrow-right:hover .arrow-glyph { transform: translateX(4px); filter: brightness(1.25); }
-.arrow-left .arrow-glyph { transform: rotate(180deg); }
-.arrow-left:hover .arrow-glyph { transform: rotate(180deg) translateX(4px); filter: brightness(1.25); }
+.arrow-left:hover .arrow-glyph { transform: translateX(-4px); filter: brightness(1.25); }
 .arrow-caption { font: 8px/1.5 var(--mono); letter-spacing: .12em; text-align: left; opacity: .96; text-shadow: 0 1px 5px #101b34, 0 0 10px #101b34; }
 .arrow-right .arrow-caption { text-align: right; }
 .bottom-dock { position: absolute; z-index: 12; left: 0; right: 0; bottom: 0; height: 95px; display: flex; align-items: center; padding: 0 clamp(28px, 5vw, 86px); border-top: 1px solid #ffffff25; background: linear-gradient(0deg, rgba(12,20,37,.77), rgba(12,20,37,.23)); }
@@ -52,8 +51,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid #fff; outline-offset:
 .dock-item { position: relative; display: flex; align-items: center; gap: 9px; border: 0; background: transparent; padding: 8px 4px; color: rgba(255,255,255,.76); font-size: 12px; letter-spacing: .06em; transition: color .2s, transform .2s; }
 .dock-item:hover { color: white; transform: translateY(-2px); }
 .dock-icon { position: relative; width: 25px; height: 25px; border: 1px solid #e4ecff88; transform: rotate(45deg); display: grid; place-items: center; background: #ffffff0d; }
-.dock-icon i { display: block; width: 8px; height: 8px; border: 1px solid #fff; border-radius: 50%; }
-.dock-icon-2 { border-radius: 50%; transform: none; }.dock-icon-2 i { width: 9px; height: 12px; border-radius: 7px 7px 2px 2px; }.dock-icon-3 { transform: rotate(45deg) scale(.84); border-color: #d8e8ff; }.dock-icon-3 i { transform: rotate(-45deg); border-radius: 0; }
+.dock-icon svg { width:16px; height:16px; transform:rotate(-45deg); color:#fff; filter:drop-shadow(0 0 4px #dfeaff58); }
 .scene-label { position: absolute; z-index: 3; left: clamp(30px, 7vw, 112px); top: 112px; display: flex; align-items: center; gap: 11px; color: #ffffff9c; font: 9px var(--mono); letter-spacing: .2em; }
 .scene-label span { font-size: 11px; color: white; }.scene-label i { width: 28px; height: 1px; background: #fff9; }
 .archive-coordinates { position: absolute; z-index: 3; right: clamp(26px, 6vw, 95px); bottom: 117px; color: #fff9; font: 8px var(--mono); letter-spacing: .12em; }

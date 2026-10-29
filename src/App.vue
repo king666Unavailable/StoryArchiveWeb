@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router'
-import { Moon, Sun } from '@lucide/vue'
+import { ChevronLeft, ChevronRight, Moon, Sun } from '@lucide/vue'
 import BottomDock from './components/BottomDock.vue'
 import type { Hotspot } from './content/navigation'
 import { loadReaderNamePromptEnabled, loadReaderProfile, saveReaderNamePromptEnabled, saveReaderProfile } from './content/readerProfile'
@@ -132,11 +132,11 @@ onUnmounted(() => {
         </Transition>
       </RouterView>
 
-      <button v-if="!isImmersivePage" class="scene-arrow arrow-left" aria-label="切换到上一个场景" @click="switchScene(-1)">
-        <span class="arrow-caption">PREVIOUS<br />SCENE</span><span class="arrow-glyph" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M7 6 41 24 7 42 17 24 7 6Z" /><path d="M2 24h16" /></svg></span>
+      <button v-if="!isImmersivePage && !onCity" class="scene-arrow arrow-left" aria-label="切换到上一个场景" @click="switchScene(-1)">
+        <span class="arrow-caption">PREVIOUS<br />SCENE</span><span class="arrow-glyph" aria-hidden="true"><ChevronLeft :size="37" :stroke-width="1.4" /></span>
       </button>
-      <button v-if="!isImmersivePage" class="scene-arrow arrow-right" aria-label="切换到下一个场景" @click="switchScene(1)">
-        <span class="arrow-caption">NEXT<br />SCENE</span><span class="arrow-glyph" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M7 6 41 24 7 42 17 24 7 6Z" /><path d="M2 24h16" /></svg></span>
+      <button v-if="!isImmersivePage && !onLeisure" class="scene-arrow arrow-right" aria-label="切换到下一个场景" @click="switchScene(1)">
+        <span class="arrow-caption">NEXT<br />SCENE</span><span class="arrow-glyph" aria-hidden="true"><ChevronRight :size="37" :stroke-width="1.4" /></span>
       </button>
     </section>
 
@@ -186,7 +186,7 @@ onUnmounted(() => {
             <h2>{{ activeHotspot.title }}</h2>
             <p class="detail-description">{{ activeHotspot.description }}</p>
             <div class="detail-rule"><span></span><i>✦</i><span></span></div>
-            <p class="detail-note">功能入口原型 · 后续可连接到作品、章节或系列页面</p>
+            <p class="detail-note">功能入口原型 · 后续可连接系列页面</p>
           </template>
         </section>
       </div>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
+import { Undo2 } from '@lucide/vue'
 import {
   createSideShadowFilterContextId,
   getActiveSideShadowFilterContextId,
@@ -195,7 +196,7 @@ watch([filteredCards, selectedFilters, sortOrder], persistFilterContext, { deep:
         </div>
         <div class="filter-actions">
           <button class="reset-filter" type="button" aria-label="清除筛选" @click="resetFilters">
-            <span class="reset-filter-icon" aria-hidden="true">↶</span>
+            <span class="reset-filter-icon" aria-hidden="true"><Undo2 :size="20" :stroke-width="1.6" /></span>
             <span class="reset-filter-label">清除筛选</span>
           </button>
         </div>

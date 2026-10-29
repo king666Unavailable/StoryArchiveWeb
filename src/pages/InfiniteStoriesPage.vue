@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
+import { ChevronLeft, ChevronRight } from '@lucide/vue'
 import { infiniteStoryTopics } from '../content/infiniteStories'
 import { loadInfiniteStories, type InfiniteStory } from '../content/worldQuestLoader'
 import { hasReaderNameVariables, loadReaderNamePromptEnabled } from '../content/readerProfile'
@@ -127,7 +128,7 @@ function onThemeImageError() {
           :disabled="infiniteStoryTopics.findIndex((topic) => topic.id === selectedTopic.id) === 0"
           @click="stepTopic(-1)"
         >
-          <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M7 6 41 24 7 42 17 24 7 6Z" /><path d="M2 24h16" /></svg>
+          <ChevronLeft :size="30" :stroke-width="1.6" aria-hidden="true" />
         </button>
         <button
           v-for="topic in infiniteStoryTopics"
@@ -148,7 +149,7 @@ function onThemeImageError() {
           :disabled="infiniteStoryTopics.findIndex((topic) => topic.id === selectedTopic.id) === infiniteStoryTopics.length - 1"
           @click="stepTopic(1)"
         >
-          <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M7 6 41 24 7 42 17 24 7 6Z" /><path d="M2 24h16" /></svg>
+          <ChevronRight :size="30" :stroke-width="1.6" aria-hidden="true" />
         </button>
       </nav>
     </template>
@@ -186,8 +187,8 @@ function onThemeImageError() {
 .infinite-tabs::before { position:absolute; z-index:0; top:55px; left:25px; right:25px; height:1px; content:""; background:linear-gradient(90deg,transparent,#e3e6ff8c 9%,#e3e6ff8c 91%,transparent); box-shadow:0 0 8px #dce4ff38; }
 .theme-step { position:absolute; z-index:1; top:39px; flex:0 0 38px; width:38px; height:34px; display:grid; place-items:center; padding:0; border:0; background:transparent; color:#f5f6ffed; cursor:pointer; filter:drop-shadow(0 0 7px #dce5ff70); transition:color .2s,transform .2s,opacity .2s; }
 .theme-step-previous { left:0; }.theme-step-next { right:0; }
-.theme-step svg { width:100%; height:100%; overflow:visible; fill:#f4f6ff2b; stroke:currentColor; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; }
-.theme-step-previous svg { transform:rotate(180deg); }.theme-step:hover:not(:disabled) { color:#fff; transform:scale(1.12); }.theme-step:disabled { opacity:.3; cursor:default; filter:none; }
+.theme-step svg { width:100%; height:100%; overflow:visible; fill:none; stroke:currentColor; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; }
+.theme-step:hover:not(:disabled) { color:#fff; transform:scale(1.12); }.theme-step:disabled { opacity:.3; cursor:default; filter:none; }
 .infinite-tab { position:relative; min-width:0; max-width:min(28vw,250px); display:flex; align-items:center; justify-content:center; gap:8px; padding:8px clamp(7px,1.6vw,22px); border:0; background:transparent; color:#e7e7f7b8; text-align:center; cursor:pointer; transition:color .2s,transform .2s; }.infinite-tab:hover { color:#fff; transform:translateY(-2px); }.infinite-tab.active { color:#fff; }
 .tab-copy { min-width:0; display:flex; align-items:center; }.tab-copy strong { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:clamp(12px,1.15vw,16px); font-weight:500; letter-spacing:.08em; text-shadow:0 2px 9px #090b21; }.tab-active-mark { flex:0 0 auto; color:#ffddb2; font-size:16px; text-shadow:0 0 8px #ffcc8c,0 0 16px #ffe8c4; }
 .infinite-message { position:absolute; z-index:2; inset:42% 0 auto; margin:0; color:#efeeffc7; text-align:center; font-size:15px; text-shadow:0 2px 8px #080a20; }.infinite-message + .infinite-message { top:calc(42% + 28px); }

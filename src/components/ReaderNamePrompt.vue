@@ -15,7 +15,7 @@ function updatePromptPreference() {
     <section class="reader-name-prompt" role="alertdialog" aria-modal="true" aria-labelledby="reader-name-title">
       <button class="reader-name-close" type="button" aria-label="关闭提示" @click="$emit('cancel')">×</button>
       <h2 id="reader-name-title">姓名提示</h2>
-      <p class="reader-name-message">这篇剧情涉及玩家姓名。<br>如有需要，请返回主页右下角的“拾录者”修改</p>
+      <p class="reader-name-message">这篇剧情涉及玩家姓名。<br>如有需要，请返回主页右下角的“玩家”修改</p>
       <div class="reader-name-rule" aria-hidden="true"><span></span><i>✦</i><span></span></div>
       <p class="reader-name-note">如果没有填写，正文会直接显示变量名</p>
       <div class="reader-name-footer">
