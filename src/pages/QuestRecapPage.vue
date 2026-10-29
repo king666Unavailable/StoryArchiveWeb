@@ -31,9 +31,10 @@ function cleanStoryText(text: string) {
     userLastname: readerProfile.value.userLastname,
     userFirstName: readerProfile.value.userFirstName,
     userName,
+    gameName: readerProfile.value.gameName,
   }
   return text
-    .replace(/\{(userLastname|userFirstName|userName)\}/g, (token, variable: string) => variables[variable] || token)
+    .replace(/\{(userLastname|userFirstName|userName|gameName)\}/g, (token, variable: string) => variables[variable] || token)
     .replace(/^>\s?/, '')
     .replace(/\*\*(.*?)\*\*/g, '$1')
     .replace(/\*(.*?)\*/g, '$1')

@@ -7,7 +7,9 @@ import { loadReaderNamePromptEnabled, loadReaderProfile, saveReaderNamePromptEna
 
 const route = useRoute()
 const router = useRouter()
+const onCity = computed(() => route.name === 'city')
 const onArchive = computed(() => route.name === 'archive')
+const onLeisure = computed(() => route.name === 'leisure')
 const isWorldQuestPage = computed(() => route.name === 'world-quests' || route.name === 'world-quest-recap')
 const isSideShadowPage = computed(() => route.name === 'side-shadows')
 const isInfiniteStoriesPage = computed(() => route.name === 'infinite-stories')
@@ -18,14 +20,19 @@ const savedReaderProfile = ref(loadReaderProfile())
 const readerNamePromptEnabled = ref(loadReaderNamePromptEnabled())
 const draftLastname = ref('')
 const draftFirstName = ref('')
+const draftGameName = ref('')
 
 function syncOrientation() {
   isPortraitPhone.value = window.matchMedia('(max-width: 820px) and (orientation: portrait)').matches
 }
 
-function switchScene() {
+const sceneRoutes = ['/', '/archive', '/leisure']
+
+function switchScene(direction: -1 | 1) {
   activeHotspot.value = null
-  router.push(onArchive.value ? '/' : '/archive')
+  const currentIndex = sceneRoutes.indexOf(route.path)
+  const nextIndex = (currentIndex + direction + sceneRoutes.length) % sceneRoutes.length
+  router.push(sceneRoutes[nextIndex])
 }
 
 function handleHotspot(item: Hotspot) {
@@ -49,6 +56,7 @@ function handleHotspot(item: Hotspot) {
     readerNamePromptEnabled.value = loadReaderNamePromptEnabled()
     draftLastname.value = savedReaderProfile.value.userLastname
     draftFirstName.value = savedReaderProfile.value.userFirstName
+    draftGameName.value = savedReaderProfile.value.gameName
   }
   activeHotspot.value = item
 }
@@ -61,6 +69,7 @@ function confirmReaderProfile() {
   savedReaderProfile.value = saveReaderProfile({
     userLastname: draftLastname.value,
     userFirstName: draftFirstName.value,
+    gameName: draftGameName.value,
   })
   closeHotspot()
 }
@@ -71,7 +80,8 @@ function updateReaderNamePromptPreference() {
 
 function onKeydown(event: KeyboardEvent) {
   if (event.key === 'Escape') activeHotspot.value = null
-  if (!isImmersivePage.value && (event.key === 'ArrowLeft' || event.key === 'ArrowRight')) switchScene()
+  if (!isImmersivePage.value && !activeHotspot.value && event.key === 'ArrowLeft') switchScene(-1)
+  if (!isImmersivePage.value && !activeHotspot.value && event.key === 'ArrowRight') switchScene(1)
 }
 
 onMounted(() => {
@@ -88,7 +98,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <main class="app-frame" :class="{ 'is-archive': onArchive, 'is-world-quest-page': isWorldQuestPage, 'is-side-shadow-page': isSideShadowPage, 'is-infinite-stories-page': isInfiniteStoriesPage, 'is-quest-recap': route.name === 'world-quest-recap', 'is-portrait-phone': isPortraitPhone }">
+  <main class="app-frame" :class="{ 'is-archive': onArchive, 'is-leisure': onLeisure, 'is-world-quest-page': isWorldQuestPage, 'is-side-shadow-page': isSideShadowPage, 'is-infinite-stories-page': isInfiniteStoriesPage, 'is-quest-recap': route.name === 'world-quest-recap', 'is-portrait-phone': isPortraitPhone }">
     <div class="ambient-grain" aria-hidden="true"></div>
 
     <header v-if="!isImmersivePage" class="topbar">
@@ -97,9 +107,9 @@ onUnmounted(() => {
       </RouterLink>
 
       <nav class="main-nav" aria-label="主导航">
-        <RouterLink to="/" :class="{ active: !onArchive }"><span>01</span> 现实世界</RouterLink>
+        <RouterLink to="/" :class="{ active: onCity }"><span>01</span> 现实世界</RouterLink>
         <RouterLink to="/archive" :class="{ active: onArchive }"><span>02</span> 主神空间</RouterLink>
-        <a href="#reading" @click.prevent="activeHotspot = { id: 'reading', title: '阅读档案', eyebrow: 'READING ROOM', description: '作品目录与阅读入口会在这里展开。', x: 50, y: 50 }"><span>03</span> 阅读档案</a>
+        <RouterLink to="/leisure" :class="{ active: onLeisure }"><span>03</span> 暇光空间</RouterLink>
       </nav>
 
       <div class="top-meta"><span class="status-dot"></span><span>LOADING</span></div>
@@ -112,15 +122,15 @@ onUnmounted(() => {
         </Transition>
       </RouterView>
 
-      <button v-if="!isImmersivePage" class="scene-arrow arrow-left" aria-label="切换到上一个场景" @click="switchScene">
+      <button v-if="!isImmersivePage" class="scene-arrow arrow-left" aria-label="切换到上一个场景" @click="switchScene(-1)">
         <span class="arrow-caption">PREVIOUS<br />SCENE</span><span class="arrow-glyph" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M7 6 41 24 7 42 17 24 7 6Z" /><path d="M2 24h16" /></svg></span>
       </button>
-      <button v-if="!isImmersivePage" class="scene-arrow arrow-right" aria-label="切换到下一个场景" @click="switchScene">
+      <button v-if="!isImmersivePage" class="scene-arrow arrow-right" aria-label="切换到下一个场景" @click="switchScene(1)">
         <span class="arrow-caption">NEXT<br />SCENE</span><span class="arrow-glyph" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M7 6 41 24 7 42 17 24 7 6Z" /><path d="M2 24h16" /></svg></span>
       </button>
     </section>
 
-    <BottomDock v-if="!isImmersivePage" :active="onArchive ? 'archive' : 'city'" @activate="handleHotspot" />
+    <BottomDock v-if="!isImmersivePage && !onLeisure" :active="onArchive ? 'archive' : 'city'" @activate="handleHotspot" />
 
     <Transition name="panel">
       <div v-if="activeHotspot" class="detail-scrim" :class="{ 'profile-scrim': activeHotspot.id === 'profile' }" @click.self="closeHotspot">
@@ -142,6 +152,11 @@ onUnmounted(() => {
               <label class="profile-field">
                 <span>名</span>
                 <input v-model="draftFirstName" type="text" autocomplete="given-name" aria-label="名" />
+                <i aria-hidden="true"></i>
+              </label>
+              <label class="profile-field profile-codename-field">
+                <span>代号</span>
+                <input v-model="draftGameName" type="text" autocomplete="nickname" aria-label="代号" />
                 <i aria-hidden="true"></i>
               </label>
             </div>

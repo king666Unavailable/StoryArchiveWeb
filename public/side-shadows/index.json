@@ -1,0 +1,25 @@
+{
+  "worlds": [
+    {
+      "id": "ShiDaiJiuYing",
+      "characters": [
+        {
+          "id": "BaiYuan",
+          "shadows": ["JiaMianShiKe"]
+        },
+        {
+          "id": "YiYu",
+          "shadows": ["WuYeYiZhi"]
+        },
+        {
+          "id": "GuShiYe",
+          "shadows": ["BingHai"]
+        },
+        {
+          "id": "XiaXiaoYin",
+          "shadows": ["HuaHaoYueYuan"]
+        }
+      ]
+    }
+  ]
+}
