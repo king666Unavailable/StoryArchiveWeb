@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router'
+import { Moon, Sun } from '@lucide/vue'
 import BottomDock from './components/BottomDock.vue'
 import type { Hotspot } from './content/navigation'
 import { loadReaderNamePromptEnabled, loadReaderProfile, saveReaderNamePromptEnabled, saveReaderProfile } from './content/readerProfile'
@@ -16,6 +17,7 @@ const isRecapPage = computed(() => route.name === 'world-quest-recap' || route.n
 const isInfiniteStoriesPage = computed(() => route.name === 'infinite-stories')
 const isImmersivePage = computed(() => isWorldQuestPage.value || isSideShadowPage.value || isInfiniteStoriesPage.value)
 const activeHotspot = ref<Hotspot | null>(null)
+const isCityNight = ref(false)
 const isPortraitPhone = ref(false)
 const savedReaderProfile = ref(loadReaderProfile())
 const readerNamePromptEnabled = ref(loadReaderNamePromptEnabled())
@@ -99,7 +101,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <main class="app-frame" :class="{ 'is-archive': onArchive, 'is-leisure': onLeisure, 'is-world-quest-page': isWorldQuestPage, 'is-side-shadow-page': isSideShadowPage, 'is-infinite-stories-page': isInfiniteStoriesPage, 'is-quest-recap': isRecapPage, 'is-portrait-phone': isPortraitPhone }">
+  <main class="app-frame" :class="{ 'is-archive': onArchive, 'is-leisure': onLeisure, 'is-world-quest-page': isWorldQuestPage, 'is-side-shadow-page': isSideShadowPage, 'is-infinite-stories-page': isInfiniteStoriesPage, 'is-quest-recap': isRecapPage, 'is-portrait-phone': isPortraitPhone, 'is-city-night': isCityNight }">
     <div class="ambient-grain" aria-hidden="true"></div>
 
     <header v-if="!isImmersivePage" class="topbar">
@@ -113,7 +115,14 @@ onUnmounted(() => {
         <RouterLink to="/leisure" :class="{ active: onLeisure }"><span>03</span> 暇光空间</RouterLink>
       </nav>
 
-      <div class="top-meta"><span class="status-dot"></span><span>LOADING</span></div>
+      <div class="top-meta">
+        <button v-if="onCity" class="city-time-toggle" type="button" :aria-pressed="isCityNight" :aria-label="isCityNight ? '切换到日景' : '切换到夜景'" :title="isCityNight ? '切换到日景' : '切换到夜景'" @click="isCityNight = !isCityNight">
+          <Moon v-if="isCityNight" :size="16" :stroke-width="1.6" />
+          <Sun v-else :size="16" :stroke-width="1.6" />
+          <span>{{ isCityNight ? '夜景' : '日景' }}</span>
+        </button>
+        <template v-else><span class="status-dot"></span><span>LOADING</span></template>
+      </div>
     </header>
 
     <section class="scene-wrap">
@@ -131,7 +140,7 @@ onUnmounted(() => {
       </button>
     </section>
 
-    <BottomDock v-if="!isImmersivePage && !onLeisure" :active="onArchive ? 'archive' : 'city'" @activate="handleHotspot" />
+    <BottomDock v-if="!isImmersivePage && !onLeisure" @activate="handleHotspot" />
 
     <Transition name="panel">
       <div v-if="activeHotspot" class="detail-scrim" :class="{ 'profile-scrim': activeHotspot.id === 'profile' }" @click.self="closeHotspot">

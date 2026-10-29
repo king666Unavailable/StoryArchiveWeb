@@ -12,6 +12,7 @@ export type Hotspot = {
 export const cityHotspots: Hotspot[] = [
   { id: 'events', title: '活动', eyebrow: 'EVENTS', description: '限时故事与特别篇将会在这里相遇。', x: 8, y: 37, align: 'center', size: 'large' },
   { id: 'daily', title: '日常档案', eyebrow: 'DAILY FILES', description: '收录日常片段、委托与未完待续的小事。', x: 39, y: 31, align: 'left', size: 'large' },
+  { id: 'infinite-encounters', title: '无限相遇', eyebrow: 'INFINITE ENCOUNTERS', description: '收录轮回世界中无数次相遇与故事。', x: 76, y: 31, align: 'center', size: 'large' },
   { id: 'memories', title: '回忆', eyebrow: 'MEMORIES', description: '回到那些仍然闪闪发亮的相遇时刻。', x: 41, y: 64, align: 'center', size: 'large' },
   { id: 'mail', title: '信笺', eyebrow: 'LETTERS', description: '一封还没拆开的信，或许藏着新的故事。', x: 20, y: 75, align: 'center' },
   { id: 'city', title: '城市', eyebrow: 'CITY GUIDE', description: '沿着城市的光，看看故事发生过的地方。', x: 76, y: 59, align: 'center', size: 'large' },

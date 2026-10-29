@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { Hotspot } from '../content/navigation'
 
-defineProps<{ active: 'city' | 'archive' }>()
 defineEmits<{ activate: [item: Hotspot] }>()
 
 const dockItems: Hotspot[] = [
@@ -20,6 +19,5 @@ const dockItems: Hotspot[] = [
         <span>{{ item.title }}</span>
       </button>
     </div>
-    <div class="dock-scene"><span class="dock-scene-dot"></span>{{ active === 'city' ? 'CITY / 01' : 'ARCHIVE / 02' }}</div>
   </footer>
 </template>
