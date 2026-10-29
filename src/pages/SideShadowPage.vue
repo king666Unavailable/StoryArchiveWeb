@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { RouterLink } from 'vue-router'
-import { loadSideShadows, type SideShadow } from '../content/sideShadows'
+import { getSideShadowThumbnail, loadSideShadows, type SideShadow } from '../content/sideShadows'
 
 type FilterKey = 'rarity' | 'world' | 'attribute' | 'character'
 type FilterState = Record<FilterKey, string[]>
@@ -88,8 +88,12 @@ const filteredCards = computed(() => {
     (selected.character.length === 0 || selected.character.includes(card.character)))
   return [...cards].sort((a, b) => {
     if (sortOrder.value === 'name') return a.title.localeCompare(b.title, 'zh-CN')
-    const difference = rarityOptions.indexOf(a.rarity) - rarityOptions.indexOf(b.rarity)
-    return sortOrder.value === 'rarity-desc' ? -difference : difference
+    const aRarity = rarityOptions.indexOf(a.rarity)
+    const bRarity = rarityOptions.indexOf(b.rarity)
+    const aRank = aRarity < 0 ? rarityOptions.length : aRarity
+    const bRank = bRarity < 0 ? rarityOptions.length : bRarity
+    const difference = aRank - bRank
+    return sortOrder.value === 'rarity-desc' ? difference : -difference
   })
 })
 </script>
@@ -137,12 +141,12 @@ const filteredCards = computed(() => {
           <p v-if="isLoading" class="results-status">正在读取侧影资料…</p>
           <p v-else-if="loadError" class="results-status">侧影资料读取失败</p>
           <div v-else-if="filteredCards.length" class="shadow-card-grid">
-            <article v-for="card in filteredCards" :key="card.id" class="shadow-card">
-              <img v-if="card.thumbnail" class="card-thumbnail" :src="card.thumbnail" :alt="`${card.title}缩略图`" loading="lazy" decoding="async">
+            <RouterLink v-for="card in filteredCards" :key="card.id" class="shadow-card" :to="{ name: 'side-shadow-detail', params: { worldId: card.worldId, characterId: card.characterId, shadowId: card.shadowId } }">
+              <img v-if="getSideShadowThumbnail(card)" class="card-thumbnail" :src="getSideShadowThumbnail(card)" :alt="`${card.title}缩略图`" loading="lazy" decoding="async">
               <img v-if="attributeIcon(card.mainAttribute)" class="card-attribute-icon" :src="attributeIcon(card.mainAttribute)" :alt="`${card.mainAttribute}属性`" loading="lazy" decoding="async">
               <img v-if="rarityIcon(card.rarity)" class="card-rarity-icon" :src="rarityIcon(card.rarity)" :alt="`${card.rarity}稀有度`" loading="lazy" decoding="async">
               <strong class="card-title">{{ card.title }}</strong>
-            </article>
+            </RouterLink>
           </div>
           <div v-else class="results-empty"><span aria-hidden="true">✧</span><p>没有符合条件的侧影</p><button type="button" @click="resetFilters">清除筛选</button></div>
         </div>
@@ -187,7 +191,7 @@ const filteredCards = computed(() => {
 .results-empty { height:65%; display:flex; flex-direction:column; justify-content:center; align-items:center; color:#d5d9ec; }.results-empty span { font-size:34px; text-shadow:0 0 16px #fff; }.results-empty p { margin:10px 0 14px; }.results-empty button { padding:6px 14px; border:1px solid #dce5ff80; background:#d7e7ff16; color:#f4f6ff; cursor:pointer; }
 .filter-characters { display:flex; flex-direction:column; align-items:stretch; }.filter-characters h2 { margin:7px 0 17px; min-height:48px; border-bottom:1px solid #dce3f44e; text-align:center; font-size:clamp(16px,1.5vw,21px); letter-spacing:.12em; }.character-list { display:flex; flex-direction:column; align-items:center; gap:8px; }.character-list button { width:100%; padding:0; border:0; background:transparent; color:#e5e3ec; cursor:pointer; }.character-list button:not(.character-all) { display:flex; flex-direction:column; align-items:center; gap:3px; }.character-portrait { position:relative; width:min(100%,150px); height:clamp(32px,5.9vh,57px); display:grid; place-items:center; overflow:hidden; border-top:1px solid #e8e9ffbb; border-bottom:1px solid #e8e9ffbb; background:radial-gradient(ellipse at 50% 35%,#d9daef70,transparent 32%),linear-gradient(110deg,#45536d9e,#1b2442b8 50%,#55617a9e); filter:hue-rotate(var(--portrait-tone)); box-shadow:inset 0 0 17px #d7ddf532; clip-path:polygon(6% 0,100% 0,94% 100%,0 100%); }.character-portrait span { color:#dfe7ff9c; font-size:21px; text-shadow:0 0 14px #fff; }.character-name { color:#c7ccde; }.character-list button.active .character-portrait { border-color:#fff; box-shadow:0 0 13px #d9e4ff8c,inset 0 0 20px #f7f6ff58; }.character-list button.active .character-name { color:#fff; text-shadow:0 0 9px #fff; }.character-all { margin-top:7px; padding:8px 0 !important; border-top:1px solid #e8e9ff84 !important; border-bottom:1px solid #e8e9ff84 !important; font-size:clamp(16px,1.5vw,21px); font-weight:600; letter-spacing:.16em; }.character-all.active { text-shadow:0 0 12px #fff; }
 .filter-actions { display:flex; align-items:center; justify-content:center; gap:12px; margin-top:auto; padding:18px 0 2px; }.filter-actions button { color:#f5f6ff; cursor:pointer; }.reset-filter { width:36px; height:36px; border:1px solid #e5e9ff8c; border-radius:50%; background:#d7e6ff1c; font:25px/1 Georgia,serif; }
-.shadow-card { background:transparent; box-shadow:none; filter:none; }.shadow-card::after { content:none; }
+.shadow-card { background:transparent; box-shadow:none; filter:none; color:inherit; text-decoration:none; }.shadow-card::after { content:none; }
 .card-thumbnail { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
 .card-attribute-icon,.card-rarity-icon { position:absolute; z-index:2; width:clamp(18px,2.1vw,29px); height:clamp(18px,2.1vw,29px); object-fit:contain; filter:drop-shadow(0 1px 4px #050718c9); }
 .card-attribute-icon { top:6px; left:8px; }.card-rarity-icon { right:8px; width:clamp(36px,4.2vw,58px); height:clamp(36px,4.2vw,58px); }
@@ -197,11 +201,11 @@ const filteredCards = computed(() => {
 .character-list button.active:not(.character-all) { color:#fff; text-shadow:0 0 9px #fff; }
 @media (max-width:850px) and (orientation:landscape) {
   .quest-header { height:49px; padding:0 18px; }.quest-back { width:31px; height:31px; }.quest-back svg { width:23px; }.quest-header-title strong { font-size:14px; }.quest-header-title small { font-size:7px; }
-  .filter-layout { inset:56px clamp(24px,4.5vw,36px) 9px; grid-template-columns:minmax(135px,23%) minmax(0,1fr) minmax(95px,17%); gap:10px; }.filter-aside-heading { min-height:29px; font-size:12px; padding-bottom:5px; }.filter-group { margin-top:10px; }.filter-group h2 { margin-bottom:5px; padding-bottom:4px; font-size:12px; gap:5px; }.filter-group h2 span { font-size:10px; }.filter-options { gap:1px 5px; padding:0 3px; }.filter-options button { padding:2px 0; font-size:10px; }.results-toolbar { min-height:32px; }.results-count { gap:6px; font-size:11px; }.results-count small { font-size:8px; }.results-sort { font-size:9px; gap:3px; }.results-sort select { min-width:80px; padding:3px 4px; }.results-scroll { padding-top:8px; }.shadow-card-grid { gap:7px; }.card-meta { left:5px; right:18px; bottom:3px; gap:3px; }.card-meta strong { font-size:9px; }.card-character { display:none; }.card-rarity { top:2px; right:4px; font-size:10px; }.card-corner { top:1px; left:4px; font-size:10px; }.filter-characters h2 { min-height:31px; margin:0 0 6px; font-size:12px; }.character-list { gap:4px; }.character-portrait { height:25px; }.character-name { font-size:8px; }.character-all { margin-top:2px; padding:3px 0 !important; font-size:12px; }.filter-actions { gap:5px; padding-top:8px; }.reset-filter { width:26px; height:26px; font-size:18px; }
+  .filter-layout { inset:56px clamp(24px,4.5vw,36px) 9px; grid-template-columns:minmax(135px,23%) minmax(0,1fr) minmax(95px,17%); gap:10px; }.filter-aside-heading { min-height:29px; font-size:12px; padding-bottom:5px; }.filter-group { margin-top:10px; }.filter-group h2 { margin-bottom:5px; padding-bottom:4px; font-size:12px; gap:5px; }.filter-group h2 span { font-size:10px; }.filter-options { gap:1px 5px; padding:0 3px; }.filter-options button { padding:2px 0; font-size:10px; }.results-toolbar { min-height:32px; }.results-count { gap:6px; font-size:11px; }.results-count small { font-size:8px; }.results-sort { font-size:9px; gap:3px; }.results-sort select { min-width:80px; padding:3px 4px; }.results-scroll { padding-top:8px; }.shadow-card-grid { gap:7px; }.card-meta { left:5px; right:18px; bottom:3px; gap:3px; }.card-meta strong { font-size:9px; }.card-character { display:none; }.card-rarity { top:2px; right:4px; font-size:10px; }.card-corner { top:1px; left:4px; font-size:10px; }.filter-characters h2 { min-height:31px; margin:0 0 6px; font-size:12px; }.character-list { gap:4px; }.character-portrait { height:25px; }.character-all { margin-top:2px; padding:3px 0 !important; font-size:12px; }.filter-actions { gap:5px; padding-top:8px; }.reset-filter { width:26px; height:26px; font-size:18px; }
 }
 @media (max-width:820px) and (orientation:portrait) {
   .quest-header { height:49px; padding:0 18px; }.quest-back { width:31px; height:31px; }.quest-back svg { width:23px; }.quest-header-title strong { font-size:14px; }.quest-header-title small { font-size:7px; }
-  .filter-layout { inset:56px clamp(24px,4.5vw,36px) 9px; grid-template-columns:minmax(135px,23%) minmax(0,1fr) minmax(95px,17%); gap:10px; }.filter-aside-heading { min-height:29px; font-size:12px; padding-bottom:5px; }.filter-group { margin-top:10px; }.filter-group h2 { margin-bottom:5px; padding-bottom:4px; font-size:12px; gap:5px; }.filter-group h2 span { font-size:10px; }.filter-options { gap:1px 5px; padding:0 3px; }.filter-options button { padding:2px 0; font-size:10px; }.results-toolbar { min-height:32px; }.results-count { gap:6px; font-size:11px; }.results-count small { font-size:8px; }.results-sort { font-size:9px; gap:3px; }.results-sort select { min-width:80px; padding:3px 4px; }.results-scroll { padding-top:8px; }.shadow-card-grid { gap:7px; }.card-meta { left:5px; right:18px; bottom:3px; gap:3px; }.card-meta strong { font-size:9px; }.card-character { display:none; }.card-rarity { top:2px; right:4px; font-size:10px; }.card-corner { top:1px; left:4px; font-size:10px; }.filter-characters h2 { min-height:31px; margin:0 0 6px; font-size:12px; }.character-list { gap:4px; }.character-portrait { height:25px; }.character-name { font-size:8px; }.character-all { margin-top:2px; padding:3px 0 !important; font-size:12px; }.filter-actions { gap:5px; padding-top:8px; }.reset-filter { width:26px; height:26px; font-size:18px; }
+  .filter-layout { inset:56px clamp(24px,4.5vw,36px) 9px; grid-template-columns:minmax(135px,23%) minmax(0,1fr) minmax(95px,17%); gap:10px; }.filter-aside-heading { min-height:29px; font-size:12px; padding-bottom:5px; }.filter-group { margin-top:10px; }.filter-group h2 { margin-bottom:5px; padding-bottom:4px; font-size:12px; gap:5px; }.filter-group h2 span { font-size:10px; }.filter-options { gap:1px 5px; padding:0 3px; }.filter-options button { padding:2px 0; font-size:10px; }.results-toolbar { min-height:32px; }.results-count { gap:6px; font-size:11px; }.results-count small { font-size:8px; }.results-sort { font-size:9px; gap:3px; }.results-sort select { min-width:80px; padding:3px 4px; }.results-scroll { padding-top:8px; }.shadow-card-grid { gap:7px; }.card-meta { left:5px; right:18px; bottom:3px; gap:3px; }.card-meta strong { font-size:9px; }.card-character { display:none; }.card-rarity { top:2px; right:4px; font-size:10px; }.card-corner { top:1px; left:4px; font-size:10px; }.filter-characters h2 { min-height:31px; margin:0 0 6px; font-size:12px; }.character-list { gap:4px; }.character-portrait { height:25px; }.character-all { margin-top:2px; padding:3px 0 !important; font-size:12px; }.filter-actions { gap:5px; padding-top:8px; }.reset-filter { width:26px; height:26px; font-size:18px; }
 }
 .filter-actions { justify-content:flex-end; }
 .reset-filter { width:auto; height:auto; display:flex; align-items:center; gap:8px; padding:0; border:0; border-radius:0; background:transparent; font:inherit; }
@@ -210,5 +214,6 @@ const filteredCards = computed(() => {
 @media (max-width:850px) and (orientation:landscape), (max-width:820px) and (orientation:portrait) {
   .reset-filter-icon { width:26px; height:26px; font-size:18px; }
   .reset-filter-label { font-size:8px; }
+  .character-name { font-size:10px; }
 }
 </style>

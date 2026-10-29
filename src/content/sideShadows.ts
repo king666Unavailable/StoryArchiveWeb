@@ -1,7 +1,13 @@
 export type SideShadow = {
   id: string
+  worldId: string
+  characterId: string
+  shadowId: string
   title: string
-  thumbnail: string
+  thumbnail1: string
+  thumbnail2: string
+  card1: string
+  card2: string
   rarity: string
   mainAttribute: string
   world: string
@@ -45,6 +51,36 @@ function assetUrl(worldId: string, characterId: string, shadowId: string, path: 
   return encodeURI(`/side-shadows/${worldId}/${characterId}/${shadowId}/${relativePath}`)
 }
 
+export type SideShadowCardVariant = 'card1' | 'card2'
+
+function preferenceKey(id: string) {
+  return `side-shadow-card:${id}`
+}
+
+export function getSideShadowCardVariant(shadow: SideShadow): SideShadowCardVariant {
+  if (typeof window === 'undefined' || !shadow.card2) return 'card1'
+  try {
+    return window.localStorage.getItem(preferenceKey(shadow.id)) === 'card2' ? 'card2' : 'card1'
+  } catch {
+    return 'card1'
+  }
+}
+
+export function saveSideShadowCardVariant(shadow: SideShadow, variant: SideShadowCardVariant) {
+  if (typeof window === 'undefined' || (variant === 'card2' && !shadow.card2)) return
+  try {
+    window.localStorage.setItem(preferenceKey(shadow.id), variant)
+  } catch {
+    // Keep the current page usable if browser storage is unavailable.
+  }
+}
+
+export function getSideShadowThumbnail(shadow: SideShadow) {
+  return getSideShadowCardVariant(shadow) === 'card2' && shadow.thumbnail2
+    ? shadow.thumbnail2
+    : shadow.thumbnail1
+}
+
 export async function loadSideShadows(): Promise<SideShadow[]> {
   const indexResponse = await fetch('/side-shadows/index.json')
   if (!indexResponse.ok) throw new Error('无法读取侧影索引文件')
@@ -62,8 +98,14 @@ export async function loadSideShadows(): Promise<SideShadow[]> {
       const metadata = parseShadowMetadata(await response.text())
       return {
         id: `${world.id}/${character.id}/${shadowId}`,
+        worldId: world.id,
+        characterId: character.id,
+        shadowId,
         title: metadata.name || shadowId,
-        thumbnail: assetUrl(world.id, character.id, shadowId, metadata.thumbnail || ''),
+        thumbnail1: assetUrl(world.id, character.id, shadowId, metadata.thumbnail1 || ''),
+        thumbnail2: assetUrl(world.id, character.id, shadowId, metadata.thumbnail2 || ''),
+        card1: assetUrl(world.id, character.id, shadowId, metadata.card1 || ''),
+        card2: assetUrl(world.id, character.id, shadowId, metadata.card2 || ''),
         rarity: metadata.rarity || '',
         mainAttribute: metadata.mainAttribute || '',
         world: metadata.world || '',

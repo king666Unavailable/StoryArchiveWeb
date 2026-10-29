@@ -12,7 +12,8 @@ side-shadows/
    └─ BaiYuan/                        # 柏源
       └─ JiaMianShiKe/                # 加冕时刻
          ├─ shadow.md                 # 名称与筛选元数据
-         ├─ thumbnail.webp            # 筛选结果卡片缩略图
+         ├─ thumbnail-1.webp          # 卡面1对应的缩略图
+         ├─ thumbnail-2.webp          # 卡面2对应的缩略图（可选）
          ├─ card-1.webp               # 卡面1（必需）
          ├─ card-2.webp               # 卡面2（可选）
          └─ stories.md                # 相会、贴近、重逢剧情
@@ -47,7 +48,8 @@ side-shadows/
 ```md
 ---
 name: "加冕时刻"
-thumbnail: "./thumbnail.webp"
+thumbnail1: "./thumbnail-1.webp"
+thumbnail2: "./thumbnail-2.webp"
 card1: "./card-1.webp"
 card2: "./card-2.webp"
 rarity: "星"
@@ -60,7 +62,8 @@ character: "柏源"
 所有字段值都用双引号包裹，统一按字符串读取。没有填写的可选字段写成 `""`；不要把字段留成空白，否则 YAML 会将它解析为 `null`。没有卡面2时也可以省略 `card2` 字段。
 
 - `name`：侧影名称。
-- `thumbnail`：筛选结果区使用的缩略图路径，可暂时留空。
+- `thumbnail1`：卡面1对应的缩略图路径；筛选页目前默认显示此图，可暂时留空。
+- `thumbnail2`：卡面2对应的缩略图路径，可选；没有卡面2时留空或省略。
 - `card1`：卡面1图片路径，必填。
 - `card2`：卡面2图片路径，可选；没有卡面2时省略字段或留空。
 - `rarity`：稀有度，只能是 `刹那`、`世界`、`瞬`、`月`、`辰星`、`星` 之一。
@@ -68,7 +71,7 @@ character: "柏源"
 - `world`：所属世界的中文名称，应与世界目录对应。
 - `character`：角色中文名称，应与角色目录对应。
 
-缩略图和卡面图片都放在侧影自己的文件夹中，路径相对于 `shadow.md`。`thumbnail` 用于筛选结果卡片，`card1`、`card2` 保存侧影卡面图。`shadow.md` 只读取 frontmatter 作为资料；不要把卡面剧情写在此文件中。
+缩略图和卡面图片都放在侧影自己的文件夹中，路径相对于 `shadow.md`。`thumbnail1`、`thumbnail2` 分别对应 `card1`、`card2`；筛选页目前只显示 `thumbnail1`。`card1`、`card2` 保存侧影卡面图。`shadow.md` 只读取 frontmatter 作为资料；不要把卡面剧情写在此文件中。
 
 ## `stories.md` 格式
 
@@ -102,7 +105,7 @@ character: "柏源"
 
 1. 页面读取 `index.json`，根据 ID 拼出每份 `shadow.md` 的路径。
 2. 筛选页读取 `shadow.md` 的 frontmatter，并根据稀有度、世界、主属性和角色进行筛选。
-3. 结果卡片显示 `thumbnail`；路径为空时图片区域保持透明。属性和稀有度图标从 `public/icon/` 按固定字段值匹配。
+3. 结果卡片默认显示 `thumbnail1`；路径为空时图片区域保持透明。`thumbnail2` 已读取到数据中，当前筛选页暂不切换显示它。属性和稀有度图标从 `public/icon/` 按固定字段值匹配。
 4. 图片使用浏览器懒加载；当前筛选页不读取 `stories.md`，该文件保留给后续剧情详情功能。
 
 200 张侧影的少量 Markdown 元数据通常不构成明显负担，主要开销是独立请求数量。先避免预载全部剧情和图片；若之后实际感觉读取偏慢，再考虑由构建脚本从 Markdown 自动生成汇总目录，仍以 Markdown 作为资料源。

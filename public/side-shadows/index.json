@@ -5,19 +5,38 @@
       "characters": [
         {
           "id": "BaiYuan",
-          "shadows": ["JiaMianShiKe"]
+          "shadows": [
+            "JiaMianShiKe",
+            "YuWoMingTang",
+            "DaiNiGuiLai",
+            "GuangYingCuo",
+            "CanYangYuJin",
+            "YeShenShiKe",
+            "ZaiCiShouHou",
+            "XuRi",
+            "SuoYuanJieDe",
+            "NanGuoZhiRen",
+            "MuSeWenQing",
+            "JinXiTuanTuan"
+          ]
         },
         {
           "id": "YiYu",
-          "shadows": ["WuYeYiZhi"]
+          "shadows": [
+            "WuYeYiZhi"
+          ]
         },
         {
           "id": "GuShiYe",
-          "shadows": ["BingHai"]
+          "shadows": [
+            "BingHai"
+          ]
         },
         {
           "id": "XiaXiaoYin",
-          "shadows": ["HuaHaoYueYuan"]
+          "shadows": [
+            "HuaHaoYueYuan"
+          ]
         }
       ]
     }
