@@ -8,4 +8,5 @@ rarity: "世界"
 mainAttribute: "思维"
 world: "时代旧影"
 character: "柏源"
+meet: "陛下，我们回家。"
 ---

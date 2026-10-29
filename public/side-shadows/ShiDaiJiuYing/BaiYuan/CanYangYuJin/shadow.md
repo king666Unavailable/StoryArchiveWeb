@@ -8,4 +8,5 @@ rarity: "世界"
 mainAttribute: "灵巧"
 world: "时代旧影"
 character: "柏源"
+meet: "您果然来找我了，如果再晚一些，我恐怕就会等不及要主动去找您了呢。"
 ---
