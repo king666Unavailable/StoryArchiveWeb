@@ -15,7 +15,7 @@ const namePromptOpen = ref(false)
 const pendingSubfolderId = ref('')
 const router = useRouter()
 const selectedTopic = computed(() => infiniteStoryTopics.find((topic) => topic.id === selectedTopicId.value) ?? infiniteStoryTopics[0] ?? null)
-const themeImage = computed(() => selectedTopic.value ? `/infinite_stories/${selectedTopic.value.id}/theme2.webp` : '')
+const themeImage = computed(() => selectedTopic.value ? `/infinite_stories/${selectedTopic.value.id}/theme.webp` : '')
 
 onMounted(async () => {
   const savedTopicId = sessionStorage.getItem('infinite-stories:last-topic')
@@ -83,7 +83,7 @@ function onThemeImageError() {
     <div class="infinite-backdrop" aria-hidden="true">
       <div class="infinite-vignette"></div>
       <img v-if="themeImage && !themeImageMissing" class="infinite-theme-image" :src="themeImage" alt="" @error="onThemeImageError">
-      <img class="infinite-frame-overlay" src="/backgrounds/infinite-dungeon-background-transparent-center2.webp" alt="">
+      <img class="infinite-frame-overlay" src="/backgrounds/infinite_bg.webp" alt="">
     </div>
 
     <header class="infinite-header">

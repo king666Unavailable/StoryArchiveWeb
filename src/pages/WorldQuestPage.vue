@@ -133,7 +133,7 @@ function continueToRecap() {
 
 <style scoped>
 .world-quest-screen { position:absolute; inset:0; overflow:hidden; color:#f7f7ff; isolation:isolate; background:#111731; }
-.quest-backdrop { position:absolute; inset:0; z-index:-1; overflow:hidden; background:#151b38 url('/backgrounds/worldQuest2.webp') center / cover no-repeat; }
+.quest-backdrop { position:absolute; inset:0; z-index:-1; overflow:hidden; background:#151b38 url('/backgrounds/worldQuest.webp') center / cover no-repeat; }
 .quest-backdrop-vignette { position:absolute; inset:0; background:linear-gradient(rgba(7,11,28,.4),rgba(7,11,28,.4)),linear-gradient(90deg,rgba(9,14,31,.54),rgba(13,18,40,.2) 46%,rgba(11,16,36,.31)),linear-gradient(0deg,rgba(9,14,32,.56),transparent 28%,rgba(9,14,32,.2)); }
 .quest-header { position:absolute; z-index:2; top:0; left:0; right:0; height:76px; padding:0 clamp(24px,4.7vw,78px); display:flex; align-items:center; gap:13px; border-bottom:1px solid rgba(228,237,255,.12); background:linear-gradient(180deg,rgba(9,14,33,.44),rgba(9,14,33,.08)); }
 .quest-back { width:42px; height:42px; display:grid; place-items:center; color:#f4f6ff; border:1px solid #eef4ff85; border-radius:4px; background:#dfeaff10; box-shadow:0 0 18px #c7dcff18; cursor:pointer; }.quest-back svg { width:27px; height:27px; fill:none; stroke:currentColor; stroke-width:1.3; stroke-linecap:round; stroke-linejoin:round; }

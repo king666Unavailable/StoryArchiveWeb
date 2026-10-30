@@ -206,7 +206,7 @@ watch([filteredCards, selectedFilters, sortOrder], persistFilterContext, { deep:
 </template>
 
 <style scoped>
-.shadow-filter-page { position:absolute; inset:0; overflow:hidden; isolation:isolate; color:#f5f2fa; background:#12172d url('/backgrounds/shadow-gallery-no-text2.webp') center / cover no-repeat; }
+.shadow-filter-page { position:absolute; inset:0; overflow:hidden; isolation:isolate; color:#f5f2fa; background:#12172d url('/backgrounds/shadow_gallery_bg.webp') center / cover no-repeat; }
 .shadow-filter-shade { position:absolute; inset:0; z-index:0; pointer-events:none; background:linear-gradient(90deg,rgba(7,10,24,.87),rgba(22,24,54,.64) 28%,rgba(25,28,62,.43) 63%,rgba(7,10,24,.82)),linear-gradient(180deg,rgba(8,10,26,.54),transparent 35%,rgba(12,14,34,.46)); }
 .quest-header { position:absolute; z-index:5; top:0; left:0; right:0; height:76px; padding:0 clamp(24px,4.7vw,78px); display:flex; align-items:center; gap:13px; border-bottom:1px solid rgba(228,237,255,.12); background:linear-gradient(180deg,rgba(9,14,33,.44),rgba(9,14,33,.08)); }
 .quest-back { width:42px; height:42px; display:grid; place-items:center; color:#f4f6ff; border:1px solid #eef4ff85; border-radius:4px; background:#dfeaff10; box-shadow:0 0 18px #c7dcff18; text-decoration:none; cursor:pointer; }.quest-back svg { width:27px; height:27px; fill:none; stroke:currentColor; stroke-width:1.3; stroke-linecap:round; stroke-linejoin:round; }
