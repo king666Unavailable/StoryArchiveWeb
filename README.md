@@ -73,6 +73,7 @@ public/
 - [无限副本内容格式](public/infinite_stories/README.md)
 - [侧影目录、字段和剧情格式](public/side-shadows/README.md)
 - [侧影资料模板](public/side-shadows/侧影卡片模板.md)
+- [侧影创建脚本](scripts/New-SideShadow.ps1)
 - [世界任务索引说明](public/world-quests/索引.md)
 - [世界任务正文模板](public/world-quests/子任务正文模板.md)
 

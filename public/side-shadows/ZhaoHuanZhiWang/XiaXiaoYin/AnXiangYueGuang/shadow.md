@@ -1,0 +1,17 @@
+---
+name: "暗香月光"
+thumbnail1: ""
+thumbnail2: ""
+card1: ""
+card2: ""
+rarity: ""
+mainAttribute: ""
+world: "召唤之王"
+character: "夏萧因"
+meet: ""
+hasKeyStory: "false"
+portrait1: ""
+portrait2: ""
+portrait3: ""
+portrait4: ""
+---

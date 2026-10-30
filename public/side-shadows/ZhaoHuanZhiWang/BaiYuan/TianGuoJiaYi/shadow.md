@@ -1,0 +1,17 @@
+---
+name: "天国嫁衣"
+thumbnail1: "300px-天国嫁衣.png"
+thumbnail2: "300px-天国嫁衣_重逢.png"
+card1: "900px-天国嫁衣.png"
+card2: "900px-天国嫁衣_重逢.png"
+rarity: "刹那"
+mainAttribute: "刹那"
+world: "召唤之王"
+character: "柏源"
+meet: "无论你在哪里，只要是阳光能够照到的地方，我都能找到你。"
+hasKeyStory: "false"
+portrait1: ""
+portrait2: ""
+portrait3: ""
+portrait4: ""
+---

@@ -594,7 +594,7 @@ function goBack() {
 .align-left { justify-self:start; text-align:left; }.align-right { justify-self:end; text-align:right; }
 .recap-narration { grid-column:1 / -1; justify-self:center; width:100%; margin:0; color:#f1eee9e8; text-align:left; font-size:clamp(15px,1.25vw,18px); line-height:1.75; letter-spacing:.045em; text-shadow:0 0 11px #e5eaff35; white-space:pre-wrap; }
 .recap-narration.parenthetical-left { text-align:left; }.recap-narration.parenthetical-right { text-align:right; }
-.recap-narration.parenthetical-left,.recap-narration.parenthetical-right { color:#f0cf68; text-shadow:0 0 11px #d5a92f35; }
+.recap-narration.parenthetical-left,.recap-narration.parenthetical-right { color:#d8cba8; text-shadow:0 0 8px #c7b77a24; }
 .recap-choice { grid-column:1 / -1; display:flex; flex-direction:column; gap:5px; width:100%; padding:2px 4px; }
 .recap-choice-speaker-row { display:flex; width:100%; padding:0 4px; }.recap-choice-speaker-row.align-left { justify-content:flex-start; }.recap-choice-speaker-row.align-right { justify-content:flex-end; }
 .recap-choice-frame { width:100%; border:1px solid #e6eaff70; border-radius:3px; background:rgba(12,17,36,.22); box-shadow:0 0 12px #dce8ff0c; }

@@ -3,6 +3,8 @@ title: 蜉蝣梦
 description: 在修行中尽可能获得更多的因果值。
 period: 神骨争夺事件后7年
 character: "柏源"
+image: ZhuLong.webp
+avatar: BaiYuan_TaoTie.webp
 type: world_quests
 ---
 

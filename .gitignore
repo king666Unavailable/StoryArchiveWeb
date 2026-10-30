@@ -5,3 +5,4 @@ dist/
 public/images/
 backups/*
 revision-records/*
+scripts/*

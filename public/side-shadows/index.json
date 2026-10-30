@@ -6,18 +6,9 @@
         {
           "id": "BaiYuan",
           "shadows": [
-            "JiaMianShiKe",
-            "YuWoMingTang",
-            "DaiNiGuiLai",
-            "GuangYingCuo",
-            "CanYangYuJin",
-            "YeShenShiKe",
-            "ZaiCiShouHou",
-            "XuRi",
-            "SuoYuanJieDe",
-            "NanGuoZhiRen",
-            "MuSeWenQing",
-            "JinXiTuanTuan"
+            "JiaMianShiKe", "YuWoMingTang", "DaiNiGuiLai", "GuangYingCuo",
+            "CanYangYuJin", "YeShenShiKe", "ZaiCiShouHou", "XuRi",
+            "SuoYuanJieDe", "NanGuoZhiRen", "MuSeWenQing", "JinXiTuanTuan"
           ]
         },
         {
@@ -47,6 +38,34 @@
           "id": "BaiYuan",
           "shadows": [
             "Chen"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "XianTuPiaoMiao",
+      "characters": [
+        {
+          "id": "BaiYuan",
+          "shadows": [
+            "ZiZai", "XuNiChangAn"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ZhaoHuanZhiWang",
+      "characters": [
+        {
+          "id": "BaiYuan",
+          "shadows": [
+            "TianGuoJiaYi"
+          ]
+        },
+        {
+          "id": "XiaXiaoYin",
+          "shadows": [
+            "AnXiangYueGuang"
           ]
         }
       ]

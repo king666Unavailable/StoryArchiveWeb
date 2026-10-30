@@ -1,0 +1,17 @@
+---
+name: "许你长安"
+thumbnail1: ""
+thumbnail2: ""
+card1: ""
+card2: ""
+rarity: "世界"
+mainAttribute: ""
+world: "仙途缥缈"
+character: "柏源"
+meet: ""
+hasKeyStory: "false"
+portrait1: ""
+portrait2: ""
+portrait3: ""
+portrait4: ""
+---

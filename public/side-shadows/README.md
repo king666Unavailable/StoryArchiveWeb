@@ -22,6 +22,7 @@ side-shadows/
 ## 索引与字段来源
 
 浏览器不能在运行时枚举 `public` 目录，所以 `index.json` 必须列出完整目录层级。索引中的 `id` 就是对应文件夹名，只负责定位文件及控制展示顺序，不存放侧影资料。
+为便于查看，`shadows` 列表按每行 4 个目录 ID 排版；创建脚本会自动保持这个格式。
 
 ```json
 {
@@ -128,5 +129,21 @@ portrait4: ""
 200 张侧影的少量 Markdown 元数据通常不构成明显负担，主要开销是独立请求数量。先避免预载全部剧情和图片；若之后实际感觉读取偏慢，再考虑由构建脚本从 Markdown 自动生成汇总目录，仍以 Markdown 作为资料源。
 
 新增侧影时，复制对应结构，填写 `shadow.md` 和 `stories.md`，放入图片，并在 `index.json` 相应角色的 `shadows` 列表中加入侧影目录 ID。不要为了占位创建图片文件。
+
+### 用脚本创建侧影目录
+
+在项目根目录的 PowerShell 中运行 `scripts/New-SideShadow.ps1`。脚本会创建侧影文件夹、带完整空字段的 `shadow.md`、包含四类剧情标题的 `stories.md`，并将侧影 ID 登记到 `index.json`。如果世界或角色尚未登记，也会创建对应索引层级；已存在的侧影目录不会被覆盖。
+
+```powershell
+.\scripts\New-SideShadow.ps1 `
+  -WorldId ZhaoHuanZhiWang `
+  -CharacterId BaiYuan `
+  -ShadowId TianGuoJiaYi `
+  -Name "天国假意" `
+  -WorldName "昭焕之望" `
+  -CharacterName "柏源"
+```
+
+`WorldId`、`CharacterId`、`ShadowId` 是拼音大驼峰目录名；后三个中文名称参数可选。也可以补充 `-Rarity "世界"` 和 `-MainAttribute "体魄"`。卡面、缩略图及其他元数据之后填写到生成的 `shadow.md`。
 
 柏源、易遇、顾时夜、夏萧因的示例占位资料目前都归在 `ShiDaiJiuYing/`（时代旧影）下；后续若侧影所属世界不同，再移动角色目录并同步更新索引及 `shadow.md` 的 `world` 字段。

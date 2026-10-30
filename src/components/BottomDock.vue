@@ -7,7 +7,7 @@ defineEmits<{ activate: [item: Hotspot] }>()
 const dockItems: Array<{ item: Hotspot; icon: typeof VenetianMask }> = [
   { item: { id: 'profile', title: '玩家', eyebrow: 'CURATOR', description: '玩家信息', x: 0, y: 0 }, icon: VenetianMask },
   { item: { id: 'side-story', title: '侧影', eyebrow: 'SIDE STORIES', description: '侧影', x: 0, y: 0 }, icon: BookImage },
-  { item: { id: 'exchange', title: '积分兑换', eyebrow: 'POITNS EXCHANGE', description: '未来可放置特别入口。', x: 0, y: 0 }, icon: Hourglass },
+  { item: { id: 'exchange', title: '记忆珍藏', eyebrow: 'MEMORY KEEPSACKE', description: '未来可以收藏令你触动的语句。', x: 0, y: 0 }, icon: Hourglass },
 ]
 </script>
 
