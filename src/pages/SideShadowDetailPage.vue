@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from 'vue'
-import { RouterLink, useRoute, useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { ArrowLeft, ArrowRight, Eye, Heart, Images, KeyRound, Repeat2, Sparkles, X } from '@lucide/vue'
 import {
   getSideShadowCardVariant,
@@ -14,6 +14,7 @@ import {
 } from '../content/sideShadows'
 import { hasReaderNameVariables, loadReaderNamePromptEnabled } from '../content/readerProfile'
 import ReaderNamePrompt from '../components/ReaderNamePrompt.vue'
+import PageNavHeader from '../components/PageNavHeader.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -237,24 +238,21 @@ function continueToStory(type = pendingStoryType.value) {
 
     <Transition name="detail-ui">
       <div v-if="isUiVisible" class="detail-overlay">
-        <header class="quest-header">
-          <RouterLink class="quest-back" :to="filterReturnLocation" aria-label="返回侧影筛选">
-            <ArrowLeft :size="25" :stroke-width="1.4" />
-          </RouterLink>
-          <span class="quest-header-divider" aria-hidden="true"></span>
-          <div class="quest-header-title"><strong>侧影详情</strong><small>SHADOW DETAILS</small></div>
-          <div class="detail-header-tools">
-            <button v-if="hasSecondCard" class="card-switch" type="button" :aria-label="selectedCard === 'card1' ? '切换到卡面2' : '切换到卡面1'" :title="selectedCard === 'card1' ? '切换到卡面2' : '切换到卡面1'" @click="toggleCard">
-              <Repeat2 :size="22" :stroke-width="1.5" />
-            </button>
-            <button v-if="hasPortraits" class="portrait-gallery-toggle" type="button" aria-label="预览竖版卡面" title="预览竖版卡面" @click="openPortraitViewer">
-              <Images :size="22" :stroke-width="1.5" />
-            </button>
-            <button class="eye-toggle" type="button" aria-label="隐藏界面" title="隐藏界面" @click="isUiVisible = false">
-              <Eye :size="23" :stroke-width="1.6" />
-            </button>
-          </div>
-        </header>
+        <PageNavHeader title="侧影详情" subtitle="SHADOW DETAILS" back-label="返回侧影筛选" :back-to="filterReturnLocation">
+          <template #actions>
+            <div class="detail-header-tools">
+              <button v-if="hasSecondCard" class="card-switch" type="button" :aria-label="selectedCard === 'card1' ? '切换到卡面2' : '切换到卡面1'" :title="selectedCard === 'card1' ? '切换到卡面2' : '切换到卡面1'" @click="toggleCard">
+                <Repeat2 :size="22" :stroke-width="1.5" />
+              </button>
+              <button v-if="hasPortraits" class="portrait-gallery-toggle" type="button" aria-label="预览竖版卡面" title="预览竖版卡面" @click="openPortraitViewer">
+                <Images :size="22" :stroke-width="1.5" />
+              </button>
+              <button class="eye-toggle" type="button" aria-label="隐藏界面" title="隐藏界面" @click="isUiVisible = false">
+                <Eye :size="23" :stroke-width="1.6" />
+              </button>
+            </div>
+          </template>
+        </PageNavHeader>
 
         <nav v-if="canBrowseResults" class="result-browse-nav" aria-label="浏览当前筛选结果">
           <button type="button" aria-label="上一个侧影" title="上一个侧影" :disabled="!canBrowsePrevious" @click="browseResults(-1)"><ArrowLeft :size="26" :stroke-width="1.5" /></button>
@@ -314,12 +312,8 @@ function continueToStory(type = pendingStoryType.value) {
 .detail-background { position:absolute; z-index:0; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; animation:card-reveal .5s ease-out both; }
 .detail-shade { position:absolute; z-index:1; inset:0; pointer-events:none; background:linear-gradient(90deg,rgba(5,8,21,.7),transparent 38%,transparent 67%,rgba(5,8,21,.35)),linear-gradient(180deg,rgba(5,8,18,.43),transparent 22%,transparent 61%,rgba(5,8,18,.62)); }
 .detail-overlay { position:absolute; z-index:2; inset:0; }
-.quest-header { position:absolute; top:0; left:0; right:0; height:76px; padding:0 clamp(24px,4.7vw,78px); display:flex; align-items:center; gap:13px; border-bottom:1px solid rgba(228,237,255,.12); background:linear-gradient(180deg,rgba(9,14,33,.44),rgba(9,14,33,.08)); }
-.quest-back,.eye-toggle,.card-switch,.portrait-gallery-toggle { width:42px; height:42px; display:grid; place-items:center; color:#f4f6ff; border:1px solid #eef4ff85; border-radius:4px; background:#dfeaff10; box-shadow:0 0 18px #c7dcff18; cursor:pointer; }
-.quest-back { text-decoration:none; }.quest-back :deep(svg) { width:27px; height:27px; }
-.quest-header-divider { height:29px; width:1px; background:linear-gradient(transparent,#eff4ff9a,transparent); margin:0 1px; }
-.quest-header-title { display:flex; flex-direction:column; gap:3px; }.quest-header-title strong { font-size:17px; font-weight:600; letter-spacing:.12em; }.quest-header-title small { color:#e9eeff91; font:8px var(--mono); letter-spacing:.2em; }
-.detail-header-tools { margin-left:auto; display:flex; align-items:center; gap:10px; }
+.eye-toggle,.card-switch,.portrait-gallery-toggle { width:42px; height:42px; display:grid; place-items:center; color:#f4f6ff; border:1px solid #eef4ff85; border-radius:4px; background:#dfeaff10; box-shadow:0 0 18px #c7dcff18; cursor:pointer; }
+.detail-header-tools { display:flex; align-items:center; gap:10px; }
 .result-browse-nav { position:absolute; z-index:4; top:50%; left:0; right:0; display:flex; justify-content:space-between; padding:0 clamp(14px,2.5vw,38px); transform:translateY(-50%); pointer-events:none; }
 .result-browse-nav button { width:44px; height:44px; display:grid; place-items:center; padding:0; color:#f4f6ffed; border:1px solid #eef4ff68; border-radius:50%; background:#dfeaff12; box-shadow:0 0 18px #c7dcff18; cursor:pointer; pointer-events:auto; transition:background .2s,border-color .2s,opacity .2s; }
 .result-browse-nav button:hover:not(:disabled) { border-color:#fff; background:#e4edff25; }
@@ -374,7 +368,7 @@ function continueToStory(type = pendingStoryType.value) {
 @keyframes card-reveal { from { opacity:.55; transform:scale(1.015); } to { opacity:1; transform:scale(1); } }
 
 @media (max-width:850px) and (orientation:landscape), (max-width:820px) and (orientation:portrait) {
-  .quest-header { height:49px; padding:0 18px; }.quest-back,.eye-toggle,.card-switch,.portrait-gallery-toggle { width:31px; height:31px; }.quest-back :deep(svg),.eye-toggle :deep(svg),.card-switch :deep(svg),.portrait-gallery-toggle :deep(svg) { width:19px; height:19px; }.quest-header-title strong { font-size:14px; }.quest-header-title small { font-size:7px; }.detail-header-tools { gap:7px; }.result-browse-nav { padding:0 10px; }.result-browse-nav button { width:32px; height:32px; }.result-browse-nav button :deep(svg) { width:20px; height:20px; }
+  .eye-toggle,.card-switch,.portrait-gallery-toggle { width:34px; height:34px; }.eye-toggle :deep(svg),.card-switch :deep(svg),.portrait-gallery-toggle :deep(svg) { width:19px; height:19px; }.detail-header-tools { gap:7px; }.result-browse-nav { padding:0 10px; }.result-browse-nav button { width:32px; height:32px; }.result-browse-nav button :deep(svg) { width:20px; height:20px; }
   .shadow-meta { left:20px; bottom:25px; max-width:49vw; }.shadow-topline { gap:6px; }.shadow-character { font-size:clamp(16px,2.7vw,21px); }.shadow-world { font-size:clamp(11px,1.8vw,14px); }.shadow-meet { margin-top:7px; font-size:clamp(7.33px,1.2vw,9.33px); }.shadow-rarity-icon { width:clamp(42px,7vw,60px); height:clamp(45px,9vh,64px); }.shadow-title-line { gap:5px; }.shadow-title-line h1 { font-size:clamp(26px,4.7vw,38px); }
   .story-entries { right:17px; bottom:14px; width:min(46vw,350px); grid-template-columns:repeat(3,minmax(0,1fr)); grid-template-rows:repeat(2,clamp(34px,9vh,44px)); grid-template-areas:'. . meeting' '. approach reunion'; gap:3px 5px; }.story-entry-meeting { grid-area:meeting; }.story-entry-approach { grid-area:approach; }.story-entry-reunion { grid-area:reunion; }.story-entries.has-key { width:min(46vw,350px); grid-template-columns:repeat(3,minmax(0,1fr)); grid-template-areas:'. . meeting' 'key approach reunion'; }.story-entries.has-key .story-entry-key { grid-area:key; }.story-entries button { height:clamp(34px,9vh,44px); gap:5px; padding:5px 7px; }.story-button-icon { width:clamp(16px,2.8vw,21px); height:clamp(16px,2.8vw,21px); }.story-button-label { font-size:clamp(10px,1.9vw,14px); }
 }

@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { loadWorldQuestTopics, type WorldQuest } from '../content/worldQuestLoader'
 import { loadSideShadowStories, loadSideShadows, type SideShadowStoryType } from '../content/sideShadows'
 import { loadReaderProfile } from '../content/readerProfile'
+import PageNavHeader from '../components/PageNavHeader.vue'
 
 type RecapEnding = { id: string; title: string; sectionId: string; choiceId: string; optionId: string }
 type RecapDialogueBlock = { type: 'dialogue'; speaker: string; text: string; alignment: 'left' | 'right' }
@@ -447,25 +448,22 @@ function goBack() {
   <section class="recap-page" aria-label="剧情回顾">
     <div class="recap-backdrop" aria-hidden="true"><div class="recap-vignette"></div></div>
 
-    <header class="recap-header">
-      <button class="recap-back" aria-label="返回世界任务" @click="goBack">
-        <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M25 8 13 20l12 12M14 20h19" /></svg>
-      </button>
-      <span class="recap-header-divider"></span>
-      <div class="recap-header-title"><strong>剧情回顾</strong><small>STORY RECAP</small></div>
-      <button
-        class="recap-alignment-toggle"
-        type="button"
-        :aria-pressed="myDialogueAlignment === 'left'"
-        @click="toggleMyDialogueAlignment"
-      >
-        <svg viewBox="0 0 20 20" aria-hidden="true">
-          <path v-if="myDialogueAlignment === 'right'" d="M4 5h12M8 9h8M4 13h12M8 17h8" />
-          <path v-else d="M4 5h12M4 9h8M4 13h12M4 17h8" />
-        </svg>
-        排版：{{ myDialogueAlignment === 'right' ? '右对齐' : '左对齐' }}
-      </button>
-    </header>
+    <PageNavHeader title="剧情回顾" subtitle="STORY RECAP" back-label="返回上一页" @back="goBack">
+      <template #actions>
+        <button
+          class="recap-alignment-toggle"
+          type="button"
+          :aria-pressed="myDialogueAlignment === 'left'"
+          @click="toggleMyDialogueAlignment"
+        >
+          <svg viewBox="0 0 20 20" aria-hidden="true">
+            <path v-if="myDialogueAlignment === 'right'" d="M4 5h12M8 9h8M4 13h12M8 17h8" />
+            <path v-else d="M4 5h12M4 9h8M4 13h12M4 17h8" />
+          </svg>
+          排版：{{ myDialogueAlignment === 'right' ? '右对齐' : '左对齐' }}
+        </button>
+      </template>
+    </PageNavHeader>
 
     <nav v-if="tocSections.length" class="recap-toc" aria-label="章节目录">
       <p class="recap-toc-title">目录</p>
@@ -573,10 +571,6 @@ function goBack() {
 .recap-page { position:absolute; inset:0; overflow:hidden; color:#f7f7ff; isolation:isolate; background:#111731; }
 .recap-backdrop { position:absolute; z-index:-1; inset:0; overflow:hidden; background:#151b38 url('/backgrounds/story_bg.webp') center / cover no-repeat; }
 .recap-vignette { position:absolute; inset:0; background:linear-gradient(rgba(7,11,28,.4),rgba(7,11,28,.4)),linear-gradient(90deg,rgba(9,14,31,.54),rgba(13,18,40,.2) 46%,rgba(11,16,36,.31)),linear-gradient(0deg,rgba(9,14,32,.56),transparent 28%,rgba(9,14,32,.2)); }
-.recap-header { position:absolute; z-index:2; top:0; left:0; right:0; height:76px; padding:0 clamp(24px,4.7vw,78px); display:flex; align-items:center; gap:13px; border-bottom:1px solid rgba(228,237,255,.12); background:linear-gradient(180deg,rgba(9,14,33,.44),rgba(9,14,33,.08)); }
-.recap-back { width:42px; height:42px; display:grid; place-items:center; color:#f4f6ff; border:1px solid #eef4ff85; border-radius:4px; background:#dfeaff10; box-shadow:0 0 18px #c7dcff18; cursor:pointer; }.recap-back svg { width:27px; height:27px; fill:none; stroke:currentColor; stroke-width:1.3; stroke-linecap:round; stroke-linejoin:round; }
-.recap-header-divider { height:29px; width:1px; background:linear-gradient(transparent,#eff4ff9a,transparent); margin:0 1px; }
-.recap-header-title { display:flex; flex-direction:column; gap:3px; }.recap-header-title strong { font-size:17px; font-weight:600; letter-spacing:.12em; }.recap-header-title small { color:#e9eeff91; font:8px var(--mono); letter-spacing:.2em; }
 .recap-alignment-toggle { margin-left:auto; display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border:1px solid #e5edff42; border-radius:3px; color:#f0f3ffdc; background:#dfeaff0d; font:13px var(--mono); letter-spacing:.05em; cursor:pointer; transition:background .2s,border-color .2s,color .2s; }
 .recap-alignment-toggle:hover { border-color:#e5edff88; color:#fff; background:#dfeaff1c; }.recap-alignment-toggle svg { width:16px; height:16px; fill:none; stroke:currentColor; stroke-width:1.25; stroke-linecap:round; }
 .recap-toc { position:absolute; z-index:1; top:112px; bottom:28px; left:clamp(25px,5vw,76px); width:min(15vw,220px); overflow-y:auto; padding:8px 16px 12px 0; scrollbar-width:none; }
@@ -610,13 +604,13 @@ function goBack() {
 .recap-message { grid-column:1 / -1; margin:0; color:#f1eee9bd; text-align:center; font-size:15px; line-height:1.8; }
 .recap-scroll::-webkit-scrollbar { width:3px; }.recap-scroll::-webkit-scrollbar-track { background:transparent; }.recap-scroll::-webkit-scrollbar-thumb { background:#e6e1d6b5; }
 @media (max-width:850px) and (orientation:landscape) {
-  .recap-header { height:54px; padding:0 24px; }.recap-back { width:34px;height:34px; }.recap-header-title strong { font-size:15px; }.recap-alignment-toggle { padding:6px 8px; gap:5px; font-size:11px; }.recap-alignment-toggle svg { width:13px; height:13px; }.recap-scroll { top:64px; right:18px; bottom:10px; left:calc(33vw + 28px); padding:12px 10px 24px; }
+  recap-alignment-toggle { padding:6px 8px; gap:5px; font-size:11px; }.recap-alignment-toggle svg { width:13px; height:13px; }.recap-scroll { top:64px; right:18px; bottom:10px; left:calc(33vw + 28px); padding:12px 10px 24px; }
   .recap-toc { top:75px; bottom:16px; left:28px; width:32vw; padding-right:10px; }.recap-toc-title { margin-bottom:7px; padding-bottom:5px; font-size:11px; }.recap-toc-rail { top:16px; bottom:16px; }.recap-toc-item { min-height:32px; gap:6px; font-size:11px; }.recap-toc-star { flex-basis:16px; font-size:11px; }.recap-toc-ending { width:calc(100% - 16px); min-height:26px; margin-left:16px; gap:5px; font-size:10px; }.recap-toc-ending-mark { flex-basis:11px; font-size:11px; }
   .recap-flow { grid-template-columns:minmax(0,1fr) minmax(0,1.1fr) minmax(0,1fr); column-gap:14px; row-gap:8px; }
   .recap-dialogue,.recap-narration { font-size:clamp(12px,2.2vh,16px); line-height:1.55; }.recap-choice-option { min-height:32px; gap:6px; padding:4px 6px; font-size:clamp(11px,2.2vh,14px); }.recap-choice-option svg { flex-basis:21px; width:21px; height:21px; }.recap-choice-branch { padding:8px 6px; }.recap-speaker { margin-bottom:4px; }
 }
 @media (max-width:820px) and (orientation:portrait) {
-  .recap-header { height:54px; padding:0 24px; }.recap-back { width:34px;height:34px; }.recap-header-title strong { font-size:15px; }.recap-alignment-toggle { padding:6px 8px; gap:5px; font-size:11px; }.recap-alignment-toggle svg { width:13px; height:13px; }.recap-scroll { top:64px; right:18px; bottom:10px; left:calc(33vw + 28px); padding:12px 10px 24px; }
+  recap-alignment-toggle { padding:6px 8px; gap:5px; font-size:11px; }.recap-alignment-toggle svg { width:13px; height:13px; }.recap-scroll { top:64px; right:18px; bottom:10px; left:calc(33vw + 28px); padding:12px 10px 24px; }
   .recap-toc { top:75px; bottom:16px; left:28px; width:32vw; padding-right:10px; }.recap-toc-title { margin-bottom:7px; padding-bottom:5px; font-size:11px; }.recap-toc-rail { top:16px; bottom:16px; }.recap-toc-item { min-height:32px; gap:6px; font-size:11px; }.recap-toc-star { flex-basis:16px; font-size:11px; }.recap-toc-ending { width:calc(100% - 16px); min-height:26px; margin-left:16px; gap:5px; font-size:10px; }.recap-toc-ending-mark { flex-basis:11px; font-size:11px; }
   .recap-flow { grid-template-columns:minmax(0,1fr) minmax(0,1.1fr) minmax(0,1fr); column-gap:14px; row-gap:8px; }
   .recap-dialogue,.recap-narration { font-size:clamp(12px,2.2vh,16px); line-height:1.55; }.recap-choice-option { min-height:32px; gap:6px; padding:4px 6px; font-size:clamp(11px,2.2vh,14px); }.recap-choice-option svg { flex-basis:21px; width:21px; height:21px; }.recap-choice-branch { padding:8px 6px; }.recap-speaker { margin-bottom:4px; }

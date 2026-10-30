@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
-import { RouterLink, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { ChevronLeft, ChevronRight } from '@lucide/vue'
 import { infiniteStoryTopics } from '../content/infiniteStories'
 import { loadInfiniteStories, type InfiniteStory } from '../content/worldQuestLoader'
 import { hasReaderNameVariables, loadReaderNamePromptEnabled } from '../content/readerProfile'
 import ReaderNamePrompt from '../components/ReaderNamePrompt.vue'
+import PageNavHeader from '../components/PageNavHeader.vue'
 
 const stories = ref<InfiniteStory[]>([])
 const selectedTopicId = ref(infiniteStoryTopics[0]?.id ?? '')
@@ -86,13 +87,7 @@ function onThemeImageError() {
       <img class="infinite-frame-overlay" src="/backgrounds/infinite_bg.webp" alt="">
     </div>
 
-    <header class="infinite-header">
-      <RouterLink class="infinite-back" to="/archive" aria-label="返回主神空间">
-        <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M25 8 13 20l12 12M14 20h19" /></svg>
-      </RouterLink>
-      <span class="infinite-header-divider"></span>
-      <div class="infinite-header-title"><strong>无限副本</strong><small>INFINITE STORIES</small></div>
-    </header>
+    <PageNavHeader title="无限副本" subtitle="INFINITE STORIES" back-label="返回主神空间" back-to="/archive" />
 
     <template v-if="selectedTopic">
       <p class="infinite-topic" :aria-label="selectedTopic.title">
@@ -164,10 +159,6 @@ function onThemeImageError() {
 .infinite-vignette { position:absolute; z-index:3; inset:0; background:linear-gradient(rgba(8,8,25,.16),rgba(8,8,25,.16)),linear-gradient(180deg,rgba(8,8,25,.24),transparent 20%,transparent 77%,rgba(8,9,26,.46)),linear-gradient(90deg,rgba(8,9,25,.28),transparent 29%,transparent 76%,rgba(8,9,25,.3)); }
 .infinite-theme-image { position:absolute; z-index:1; left:12.5%; top:12.5%; width:75%; height:75%; object-fit:contain; object-position:center; }
 .infinite-frame-overlay { position:absolute; z-index:2; inset:0; width:100%; height:100%; object-fit:cover; pointer-events:none; }
-.infinite-header { position:absolute; z-index:5; top:0; left:0; right:0; height:76px; padding:0 clamp(24px,4.7vw,78px); display:flex; align-items:center; gap:13px; border-bottom:1px solid rgba(228,237,255,.12); background:linear-gradient(180deg,rgba(9,14,33,.44),rgba(9,14,33,.08)); }
-.infinite-back { width:42px; height:42px; display:grid; place-items:center; color:#f4f6ff; border:1px solid #eef4ff85; border-radius:4px; background:#dfeaff10; box-shadow:0 0 18px #c7dcff18; text-decoration:none; }.infinite-back svg { width:27px; height:27px; fill:none; stroke:currentColor; stroke-width:1.3; stroke-linecap:round; stroke-linejoin:round; }
-.infinite-header-divider { height:29px; width:1px; background:linear-gradient(transparent,#eff4ff9a,transparent); margin:0 1px; }
-.infinite-header-title { display:flex; flex-direction:column; gap:3px; }.infinite-header-title strong { font-size:17px; font-weight:600; letter-spacing:.12em; }.infinite-header-title small { color:#e9eeff91; font:8px var(--mono); letter-spacing:.2em; }
 .infinite-topic { position:absolute; z-index:3; left:50%; top:20%; width:max-content; max-width:88vw; margin:0; padding:8px 28px 14px; transform:translateX(-50%); display:flex; align-items:center; justify-content:center; gap:clamp(8px,1.2vw,18px); font-size:clamp(32px,4vw,56px); font-weight:600; letter-spacing:.13em; text-shadow:0 2px 15px #08081c,0 0 28px #ece8ffab; }
 .topic-title-characters { display:flex; align-items:center; gap:.015em; white-space:nowrap; }
 .topic-title-characters > span { display:inline-block; line-height:1.2; text-shadow:0 2px 15px #08081c,0 0 28px #ece8ffab; }
@@ -194,14 +185,14 @@ function onThemeImageError() {
 .infinite-message { position:absolute; z-index:2; inset:42% 0 auto; margin:0; color:#efeeffc7; text-align:center; font-size:15px; text-shadow:0 2px 8px #080a20; }.infinite-message + .infinite-message { top:calc(42% + 28px); }
 @keyframes story-reveal { from { opacity:.3; transform:translateY(5px); } to { opacity:1; transform:translateY(0); } }
 @media (max-width:850px) and (orientation:landscape) {
-  .infinite-header { height:54px; padding:0 24px; }.infinite-back { width:34px;height:34px; }.infinite-topic { top:12%; padding:6px 18px 10px; gap:8px; font-size:clamp(25px,5vh,38px); }
+  .infinite-topic { top:12%; padding:6px 18px 10px; gap:8px; font-size:clamp(25px,5vh,38px); }
   .infinite-feature-image { top:48%; width:42vw; height:38vh; }
   .infinite-story-panel { top:40%; left:5%; width:29vw; max-height:38%; padding:4px 0; }.story-heading { gap:9px; }.story-heading h1 { font-size:clamp(20px,4vh,29px); }.story-spark { font-size:17px; }.story-eyebrow { margin-bottom:4px; font-size:7px; }.story-description { margin:9px 0 0 26px; font-size:clamp(11px,2.3vh,14px); }.story-rule { margin:12px 0 9px 26px; }.story-body { max-height:20vh; margin-left:26px; font-size:clamp(10px,2vh,13px); line-height:1.65; }
   .infinite-tabs { left:4%; right:4%; bottom:2%; min-height:54px; gap:4px; }.infinite-tabs::before { top:40px; left:18px; right:18px; }.theme-step { top:25px; flex-basis:30px; width:30px; height:30px; }.infinite-tab { max-width:32vw; padding:4px 5px; gap:4px; }.tab-copy strong { font-size:clamp(10px,2.5vh,13px); }.tab-active-mark { font-size:12px; }
   .infinite-subtask-entries { right:5%; bottom:20%; width:41vw; gap:4px; }.subtask-entry { min-height:47px; gap:7px; }.subtask-entry-stars { width:20px;flex-basis:20px; }.subtask-entry-stars i:first-child { font-size:13px; }.subtask-entry-stars i:last-child { font-size:8px; }.subtask-entry-copy strong { font-size:clamp(12px,2.5vh,16px); }
 }
 @media (max-width:820px) and (orientation:portrait) {
-  .app-frame.is-portrait-phone .infinite-header { height:54px; padding:0 24px; }.app-frame.is-portrait-phone .infinite-back { width:34px;height:34px; }.app-frame.is-portrait-phone .infinite-topic { top:12%; padding:6px 18px 10px; gap:8px; font-size:clamp(25px,5vh,38px); }
+  .app-frame.is-portrait-phone .infinite-topic { top:12%; padding:6px 18px 10px; gap:8px; font-size:clamp(25px,5vh,38px); }
   .app-frame.is-portrait-phone .infinite-feature-image { top:48%; width:42vw; height:38vh; }
   .app-frame.is-portrait-phone .infinite-story-panel { top:40%; left:5%; width:29vw; max-height:38%; padding:4px 0; }.app-frame.is-portrait-phone .story-heading { gap:9px; }.app-frame.is-portrait-phone .story-heading h1 { font-size:clamp(20px,4vh,29px); }.app-frame.is-portrait-phone .story-spark { font-size:17px; }.app-frame.is-portrait-phone .story-eyebrow { margin-bottom:4px; font-size:7px; }.app-frame.is-portrait-phone .story-description { margin:9px 0 0 26px; font-size:clamp(11px,2.3vh,14px); }.app-frame.is-portrait-phone .story-rule { margin:12px 0 9px 26px; }.app-frame.is-portrait-phone .story-body { max-height:20vh; margin-left:26px; font-size:clamp(10px,2vh,13px); line-height:1.65; }
   .app-frame.is-portrait-phone .infinite-tabs { left:4%; right:4%; bottom:2%; min-height:54px; gap:4px; }.app-frame.is-portrait-phone .infinite-tabs::before { top:40px; left:18px; right:18px; }.app-frame.is-portrait-phone .theme-step { top:25px; flex-basis:30px; width:30px; height:30px; }.app-frame.is-portrait-phone .infinite-tab { max-width:32vw; padding:4px 5px; gap:4px; }.app-frame.is-portrait-phone .tab-copy strong { font-size:clamp(10px,2.5vh,13px); }.app-frame.is-portrait-phone .tab-active-mark { font-size:12px; }
